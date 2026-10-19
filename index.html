@@ -64,6 +64,7 @@ nav.glass{display:flex;justify-content:center;gap:6px;width:max-content;max-widt
 .dk.act{width:auto;padding:0 16px 0 14px;color:#0b0f00;background:linear-gradient(135deg,#E4FF6B,#34F5A5);box-shadow:0 8px 24px -6px var(--v)}
 .dk.act em{max-width:90px;opacity:1;margin-inline-start:6px;font-weight:900}
 .dk.act span{transform:none;filter:none}
+#fsT{line-height:.95;letter-spacing:-.01em}#fs{border:0;border-radius:0;overflow:hidden;box-shadow:inset 0 0 90px var(--v)}
 </style></head>
 <body class="h-[100dvh] flex flex-col select-none overflow-hidden"><div class="aur"><i></i><i></i><i></i></div>
 <div id="wkl"></div>
@@ -102,14 +103,12 @@ nav.glass{display:flex;justify-content:center;gap:6px;width:max-content;max-widt
 <!-- 4 RULER -->
 <section class="pg" id="p3" style="padding:0;overflow:hidden;touch-action:none">
 <canvas id="rc" class="absolute inset-0 w-full h-full"></canvas>
-<div class="absolute top-2 left-3 right-14 glass p-2 z-10" style="touch-action:auto">
-<div class="flex items-center gap-2 text-xs"><span>معايرة: طابق الكارت</span><span id="cardR" class="mono"></span></div>
-<div id="card" style="border:2px dashed var(--v);border-radius:10px;margin:6px 0;height:0"></div>
-<input id="cal" type="range" min="200" max="520" step="0.5"><div class="flex gap-2 mt-2"><button id="mLn" class="btn sel flex-1" style="padding:.45rem;font-size:12px">📏 خطّان</button><button id="mRc" class="btn flex-1" style="padding:.45rem;font-size:12px">📐 مستطيل</button><button id="mU" class="btn flex-1" style="padding:.45rem;font-size:12px">mm</button></div></div>
+<div class="absolute top-2 left-3 right-14 z-10 flex gap-2" style="touch-action:auto"><button id="mCal" class="btn flex-1" style="padding:.5rem;font-size:13px">🎯 معايرة</button><button id="mU" class="btn flex-1" style="padding:.5rem;font-size:13px">mm</button></div>
+<div id="card" style="display:none;position:absolute;left:50%;top:64px;transform:translateX(-50%);border:2px dashed var(--v);border-radius:12px;z-index:3;pointer-events:none;background:rgba(198,255,61,.07)"><span style="position:absolute;inset:0;display:grid;place-items:center;font-size:12px;color:var(--v);text-align:center">💳 كارت بنك<br>85.6×54 مم</span></div>
+<div id="cp" class="absolute left-3 right-14 glass p-3 z-10 text-xs" style="display:none;bottom:12px;touch-action:auto"><p id="cHint" class="mb-1">ضع <b>كارت بنك حقيقي</b> فوق المستطيل المنقّط وحرّك السلايدر لحد ما حدوده تطابق الكارت تماماً (مرة واحدة فقط):</p><input id="cal" type="range" min="170" max="760" step="0.5"><div class="flex gap-2 my-1"><button id="cm1" class="btn flex-1" style="padding:.35rem">− أصغر</button><button id="cp1" class="btn flex-1" style="padding:.35rem">أكبر +</button></div><p class="mt-1">أو قِس أي شيء تعرف طوله: ضع الخطين A و B على طرفيه واكتب طوله الحقيقي بالمم:</p><div class="flex gap-2 mt-1"><input id="cLen" type="number" inputmode="decimal" placeholder="مم" class="mono flex-1 p-2 text-center"><button id="cGo" class="btn v" style="padding:.4rem 1rem">اضبط</button></div></div>
 <div id="ln1" class="ln"><i style="background:var(--r);box-shadow:0 0 10px var(--r)"></i><b style="color:var(--r)">A</b></div>
 <div id="ln2" class="ln"><i style="background:var(--c);box-shadow:0 0 10px var(--c)"></i><b style="color:var(--c)">B</b></div>
-<svg id="ms" class="absolute inset-0 w-full h-full" style="display:none;pointer-events:none;z-index:4"><rect id="mr" fill="rgba(34,229,255,.12)" stroke="#22E5FF" stroke-width="2" stroke-dasharray="7 5"/><line id="md" stroke="#FF3D77" stroke-width="2" stroke-dasharray="3 4"/><g font-size="13" font-weight="700" text-anchor="middle" fill="#fff" stroke="#000" stroke-width="3" paint-order="stroke"><text id="tw"></text><text id="th"></text><text id="td" fill="#FF8FAE"></text></g></svg><div id="h1" class="hd"></div><div id="h2" class="hd"></div>
-<div id="rd" class="mono absolute left-3 glass p-3 text-center z-10" style="bottom:12px"><div id="mm" class="text-2xl font-black" style="color:var(--v)">0.0 mm</div><div id="cm" class="text-sm text-zinc-300">0.00 cm</div></div></section>
+<div id="rd" class="mono absolute left-3 glass p-3 text-center z-10" style="bottom:48px"><div id="mm" class="text-2xl font-black" style="color:var(--v)">0.0 mm</div><div id="cm" class="text-sm text-zinc-300">0.00 cm</div></div></section>
 
 <!-- 5 LEVEL -->
 <section class="pg" id="p4"><div class="glass p-4 text-center space-y-3">
@@ -133,7 +132,7 @@ nav.glass{display:flex;justify-content:center;gap:6px;width:max-content;max-widt
 <!-- Sign fullscreen -->
 <div id="fs" class="ov"><div id="fsBox"><div id="fsT"></div></div>
 <div id="corner" class="absolute top-0 left-0 w-16 h-16 z-10 text-center text-xl pt-2 opacity-60"></div>
-<div id="fsCtl" class="absolute bottom-4 left-0 right-0 flex justify-center gap-3 z-10"><button id="fsR" class="btn v">↻ تدوير</button><button id="fsX" class="btn r">خروج</button></div></div>
+<div id="fsCtl" class="absolute bottom-4 left-0 right-0 flex justify-center gap-3 z-10"><button id="fsM" class="btn">A−</button><button id="fsP" class="btn">A+</button><button id="fsR" class="btn v">↻ تدوير</button><button id="fsX" class="btn r">خروج</button></div></div>
 
 <!-- Guard overlay -->
 <div id="gO" class="ov flex-col items-center justify-center" style="background:#000;touch-action:none">
@@ -159,12 +158,13 @@ function go(i){$$('.pg').forEach((p,k)=>p.classList.toggle('act',k==i));$$('.dk'
 $$('.dk').forEach(b=>b.onclick=()=>go(+b.dataset.p));
 
 /* 1 SIGN */
-let auto=true,rot=false,locked=false,mic=null,lastTap=0;
+let zoom=1,auto=true,rot=false,locked=false,mic=null,lastTap=0;
 $$('#tpl .btn').forEach(b=>b.onclick=()=>$('#sTxt').value=b.dataset.t);
 function fit(){const W=innerWidth,H=innerHeight,box=$('#fsBox'),t=$('#fsT');
-const m=r=>{const bw=(r?H:W)*.97,bh=(r?W:H)*.97;box.style.width=bw+'px';box.style.height=bh+'px';t.style.width='100%';let lo=8,hi=1400;while(hi-lo>2){const k=(lo+hi)>>1;t.style.fontSize=k+'px';(t.scrollWidth<=bw&&t.scrollHeight<=bh)?lo=k:hi=k}return lo};
-if(auto)rot=m(true)>m(false)*1.05;const f=m(rot);box.style.transform=`translate(-50%,-50%) rotate(${rot?90:0}deg)`;t.style.fontSize=f+'px'}
-$('#sGo').onclick=async()=>{$('#fsT').textContent=$('#sTxt').value||' ';$('#fs').classList.add('on');auto=true;fit();try{await document.documentElement.requestFullscreen()}catch(e){}if($('#reactT').checked)micOn()};
+const m=r=>{const bw=(r?H:W)*.995,bh=(r?W:H)*.995;box.style.width=bw+'px';box.style.height=bh+'px';t.style.width='100%';let lo=8,hi=1400;while(hi-lo>2){const k=(lo+hi)>>1;t.style.fontSize=k+'px';(t.scrollWidth<=bw&&t.scrollHeight<=bh)?lo=k:hi=k}return lo};
+if(auto)rot=m(true)>m(false)*1.05;const f=m(rot);box.style.transform=`translate(-50%,-50%) rotate(${rot?90:0}deg)`;t.style.fontSize=f*zoom+'px'}
+$('#sGo').onclick=async()=>{$('#fsT').textContent=$('#sTxt').value||' ';$('#fs').classList.add('on');auto=true;zoom=1;fit();try{await document.documentElement.requestFullscreen()}catch(e){}if($('#reactT').checked)micOn()};
+$('#fsP').onclick=()=>{zoom=Math.min(2.5,zoom*1.12);fit()};$('#fsM').onclick=()=>{zoom=Math.max(.4,zoom/1.12);fit()};
 $('#fsR').onclick=()=>{auto=false;rot=!rot;fit()};
 $('#fsX').onclick=()=>{$('#fs').classList.remove('on');micOff();try{document.fullscreenElement&&document.exitFullscreen()}catch(e){}};
 addEventListener('resize',()=>{$('#fs').classList.contains('on')&&fit();drawR()});
@@ -208,29 +208,22 @@ $('#shock').onclick=()=>$('#shock').classList.remove('on');
 
 /* 4 RULER */
 let mode=0,uI=0;const U=[1,.1,1/25.4];let ppm=(()=>{try{return+localStorage.getItem('ppm')}catch(e){return 0}})()||3.78;const rc=$('#rc'),p3=$('#p3');
-function setCal(px){ppm=px/85.6;try{localStorage.setItem('ppm',ppm)}catch(e){}$('#cal').value=px;$('#card').style.width=px+'px';$('#card').style.height=(px/1.586)+'px';$('#cardR').textContent='85.60 mm';drawR();rd()}
-$('#cal').oninput=e=>setCal(+e.target.value);
+function setCal(px){ppm=px/85.6;try{localStorage.setItem('ppm',ppm)}catch(e){}$('#cal').value=px;$('#card').style.width=px/1.586+'px';$('#card').style.height=px+'px';drawR();rd()}
+const cal2=px=>{setCal(clamp(px,170,760));try{localStorage.setItem('ppmc',1)}catch(e){}};
+function calUI(o){$('#cp').style.display=$('#card').style.display=o?'block':'none';$('#rd').style.display=o?'none':'block'}
+$('#cal').oninput=e=>cal2(+e.target.value);
 function drawR(){const w=p3.clientWidth,h=p3.clientHeight;if(!w)return;const d=devicePixelRatio||1;rc.width=w*d;rc.height=h*d;const x=rc.getContext('2d');x.scale(d,d);x.fillStyle='#0a0818';x.fillRect(0,0,w,h);
 x.strokeStyle=x.fillStyle='#CCFF00';x.font='11px monospace';const inch=uI==2,sp=inch?ppm*25.4/8:ppm,M=inch?8:10,m5=inch?4:5,Lf=i=>i%M==0?30:i%m5==0?20:11;
 x.textAlign='right';for(let i=0;i*sp<h;i++){const y=i*sp;x.globalAlpha=i%M==0?1:.8;x.beginPath();x.moveTo(w,y+.5);x.lineTo(w-Lf(i),y+.5);x.stroke();if(i%M==0&&i)x.fillText(i/M,w-34,y+4)}
 x.textAlign='center';for(let i=0;i*sp<w;i++){const q=i*sp;x.globalAlpha=i%M==0?1:.8;x.beginPath();x.moveTo(q+.5,h);x.lineTo(q+.5,h-Lf(i));x.stroke();if(i%M==0&&i)x.fillText(i/M,q,h-36)}x.globalAlpha=1}
-function rd(){const n=mm=>(mm*U[uI]).toFixed(uI?2:1),u=['mm','cm','in'][uI];let t,s;
-if(!mode){const mm=Math.abs($('#ln2').offsetTop-$('#ln1').offsetTop)/ppm;t=n(mm)+' '+u;s=uI?mm.toFixed(1)+' mm':(mm/10).toFixed(2)+' cm'}
-else{const a=$('#h1'),b=$('#h2'),x1=parseFloat(a.style.left),y1=parseFloat(a.style.top),x2=parseFloat(b.style.left),y2=parseFloat(b.style.top),w=Math.abs(x2-x1)/ppm,h=Math.abs(y2-y1)/ppm,dg=Math.hypot(w,h),r=$('#mr'),m=$('#md');
-r.setAttribute('x',Math.min(x1,x2));r.setAttribute('y',Math.min(y1,y2));r.setAttribute('width',Math.abs(x2-x1));r.setAttribute('height',Math.abs(y2-y1));
-m.setAttribute('x1',x1);m.setAttribute('y1',y1);m.setAttribute('x2',x2);m.setAttribute('y2',y2);
-const T=(id,tx,X,Y)=>{const e=$(id);e.textContent=tx;e.setAttribute('x',X);e.setAttribute('y',Y)};
-T('#tw',n(w),(x1+x2)/2,Math.min(y1,y2)-8);T('#th',n(h),Math.min(x1,x2)-26,(y1+y2)/2);T('#td',n(dg),(x1+x2)/2+30,(y1+y2)/2-10);
-t=n(w)+' × '+n(h)+' '+u;s='قطر '+n(dg)+' · مساحة '+(w*h/100).toFixed(1)+' سم²'}
-$('#mm').textContent=t;$('#cm').textContent=s}
+function rd(){const mm=Math.abs($('#ln2').offsetTop-$('#ln1').offsetTop)/ppm,u=['mm','cm','in'][uI];$('#mm').textContent=(mm*U[uI]).toFixed(uI?2:1)+' '+u;$('#cm').textContent=uI?mm.toFixed(1)+' mm':(mm/10).toFixed(2)+' cm'}
 $$('.ln').forEach(l=>{l.onpointerdown=e=>{l.setPointerCapture(e.pointerId);l.dr=1};l.onpointermove=e=>{if(!l.dr)return;l.style.top=clamp(e.clientY-p3.getBoundingClientRect().top,0,p3.clientHeight)+'px';rd()};l.onpointerup=l.onpointercancel=()=>l.dr=0});
-function setMode(m){mode=m;$$('.ln').forEach(l=>l.style.display=m?'none':'block');$$('.hd').forEach(l=>l.style.display=m?'block':'none');$('#ms').style.display=m?'block':'none';$('#mLn').classList.toggle('sel',!m);$('#mRc').classList.toggle('sel',!!m);rd()}
-$('#mLn').onclick=()=>setMode(0);$('#mRc').onclick=()=>setMode(1);
+$('#mCal').onclick=()=>calUI($('#cp').style.display=='none');
+$('#cm1').onclick=()=>cal2(+$('#cal').value-1);$('#cp1').onclick=()=>cal2(+$('#cal').value+1);
+$('#cGo').onclick=()=>{const L=parseFloat($('#cLen').value),px=Math.abs($('#ln2').offsetTop-$('#ln1').offsetTop);if(L>0&&px>10)cal2(px/L*85.6)};
 $('#mU').onclick=()=>{uI=(uI+1)%3;$('#mU').textContent=['mm','cm','in'][uI];drawR();rd()};
-$$('.hd').forEach(l=>{l.onpointerdown=e=>{l.setPointerCapture(e.pointerId);l.dr=1};l.onpointermove=e=>{if(!l.dr)return;const r=p3.getBoundingClientRect();l.style.left=clamp(e.clientX-r.left,0,p3.clientWidth)+'px';l.style.top=clamp(e.clientY-r.top,0,p3.clientHeight)+'px';rd()};l.onpointerup=l.onpointercancel=()=>l.dr=0});
-$('#h1').style.cssText='left:90px;top:190px';$('#h2').style.cssText='left:250px;top:330px';
 $('#ln1').style.top='200px';$('#ln2').style.top='320px';
-new ResizeObserver(drawR).observe(p3);setCal(clamp(ppm*85.6,200,520));setMode(0);
+new ResizeObserver(drawR).observe(p3);setCal(clamp(ppm*85.6,170,760));{let c=0;try{c=localStorage.getItem('ppmc')}catch(e){}calUI(!c)}
 
 /* 5 LEVEL */
 let lm=0,was=false;const DG=Math.PI/180;
