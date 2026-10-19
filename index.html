@@ -52,6 +52,18 @@ nav.glass{margin:0 12px 10px;padding:6px;border-radius:30px;gap:4px}
 .ln b{position:absolute;left:8px;top:8px;font-size:12px;padding:0 8px;border-radius:8px;background:#000a}
 #lv circle:first-child{fill:rgba(0,0,0,.55)}
 #lv{filter:drop-shadow(0 0 24px rgba(34,229,255,.3))}
+
+.btn.sel{background:var(--c);color:#001018;border-color:var(--c);box-shadow:0 0 18px var(--c)}
+.hd{position:absolute;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;border:2px solid var(--v);background:rgba(198,255,61,.18);box-shadow:0 0 16px var(--v);z-index:6;touch-action:none;display:none}
+.hd::after{content:"";position:absolute;inset:17px;border-radius:50%;background:var(--v)}
+#fsT{line-height:1.05}#fs{border-width:5px}
+nav.glass{display:flex;justify-content:center;gap:6px;width:max-content;max-width:calc(100% - 20px);margin:0 auto calc(12px + env(safe-area-inset-bottom,0px));padding:7px;border-radius:40px;background:rgba(10,8,24,.72);box-shadow:0 20px 40px -10px #000,0 0 0 1px rgba(255,255,255,.12),0 0 34px -8px var(--p)}
+.dk{flex:none;flex-direction:row;gap:0;padding:0;width:46px;height:46px;justify-content:center;border-radius:30px;font-size:13px;color:#fff;overflow:hidden;transition:.35s}
+.dk span{font-size:22px}
+.dk em{font-style:normal;max-width:0;opacity:0;white-space:nowrap;overflow:hidden;transition:.35s}
+.dk.act{width:auto;padding:0 16px 0 14px;color:#0b0f00;background:linear-gradient(135deg,#E4FF6B,#34F5A5);box-shadow:0 8px 24px -6px var(--v)}
+.dk.act em{max-width:90px;opacity:1;margin-inline-start:6px;font-weight:900}
+.dk.act span{transform:none;filter:none}
 </style></head>
 <body class="h-[100dvh] flex flex-col select-none overflow-hidden"><div class="aur"><i></i><i></i><i></i></div>
 <div id="wkl"></div>
@@ -93,27 +105,30 @@ nav.glass{margin:0 12px 10px;padding:6px;border-radius:30px;gap:4px}
 <div class="absolute top-2 left-3 right-14 glass p-2 z-10" style="touch-action:auto">
 <div class="flex items-center gap-2 text-xs"><span>معايرة: طابق الكارت</span><span id="cardR" class="mono"></span></div>
 <div id="card" style="border:2px dashed var(--v);border-radius:10px;margin:6px 0;height:0"></div>
-<input id="cal" type="range" min="200" max="520" step="0.5"></div>
+<input id="cal" type="range" min="200" max="520" step="0.5"><div class="flex gap-2 mt-2"><button id="mLn" class="btn sel flex-1" style="padding:.45rem;font-size:12px">📏 خطّان</button><button id="mRc" class="btn flex-1" style="padding:.45rem;font-size:12px">📐 مستطيل</button><button id="mU" class="btn flex-1" style="padding:.45rem;font-size:12px">mm</button></div></div>
 <div id="ln1" class="ln"><i style="background:var(--r);box-shadow:0 0 10px var(--r)"></i><b style="color:var(--r)">A</b></div>
 <div id="ln2" class="ln"><i style="background:var(--c);box-shadow:0 0 10px var(--c)"></i><b style="color:var(--c)">B</b></div>
-<div id="rd" class="mono absolute left-3 bottom-3 glass p-3 text-center z-10"><div id="mm" class="text-3xl font-black" style="color:var(--v)">0.0 mm</div><div id="cm" class="text-sm text-zinc-300">0.00 cm</div></div></section>
+<svg id="ms" class="absolute inset-0 w-full h-full" style="display:none;pointer-events:none;z-index:4"><rect id="mr" fill="rgba(34,229,255,.12)" stroke="#22E5FF" stroke-width="2" stroke-dasharray="7 5"/><line id="md" stroke="#FF3D77" stroke-width="2" stroke-dasharray="3 4"/><g font-size="13" font-weight="700" text-anchor="middle" fill="#fff" stroke="#000" stroke-width="3" paint-order="stroke"><text id="tw"></text><text id="th"></text><text id="td" fill="#FF8FAE"></text></g></svg><div id="h1" class="hd"></div><div id="h2" class="hd"></div>
+<div id="rd" class="mono absolute left-3 glass p-3 text-center z-10" style="bottom:12px"><div id="mm" class="text-2xl font-black" style="color:var(--v)">0.0 mm</div><div id="cm" class="text-sm text-zinc-300">0.00 cm</div></div></section>
 
 <!-- 5 LEVEL -->
 <section class="pg" id="p4"><div class="glass p-4 text-center space-y-3">
 <h2 class="font-black text-xl" style="color:var(--e)">ميزان الليزر</h2>
 <button id="lPerm" class="btn w-full">تفعيل الحساسات</button>
+<div class="flex gap-2"><button class="btn sel flex-1 lm" data-m="0" style="padding:.55rem .2rem;font-size:13px">⭕ مسطح</button><button class="btn flex-1 lm" data-m="1" style="padding:.55rem .2rem;font-size:13px">↔ أفقي</button><button class="btn flex-1 lm" data-m="2" style="padding:.55rem .2rem;font-size:13px">↕ رأسي</button></div>
+<div id="ltw" class="relative mx-auto w-full" style="display:none;height:288px"><svg id="lt" viewBox="-150 -60 300 120" style="position:absolute;left:50%;top:50%;width:288px;height:115px;margin:-57px 0 0 -144px;transition:transform .3s"><rect x="-140" y="-34" width="280" height="68" rx="34" fill="rgba(0,0,0,.55)" stroke="#667" stroke-width="2"/><path d="M-26 -34V34M26 -34V34" stroke="#fff8" stroke-width="2"/><path d="M-120 0H-50M50 0H120" stroke="#fff3" stroke-dasharray="3 5"/><ellipse id="tB" rx="20" ry="22" fill="#00F5D4" style="filter:drop-shadow(0 0 8px #00F5D4)"/></svg></div>
 <svg id="lv" viewBox="-150 -150 300 300" class="mx-auto w-72 h-72 max-w-full">
 <circle r="140" fill="#000" stroke="#333" stroke-width="2"/><circle r="100" fill="none" stroke="#333"/><circle r="50" fill="none" stroke="#333"/>
 <circle id="lT" r="14" fill="none" stroke="#fff6" stroke-width="2"/>
 <path d="M-140 0H140M0 -140V140" stroke="#333"/><circle id="lB" r="16" fill="#00F5D4" style="filter:drop-shadow(0 0 8px currentColor)"/></svg>
-<div class="mono flex justify-around text-2xl font-black"><span>X <b id="lx">0.0</b>°</span><span>Y <b id="ly">0.0</b>°</span></div>
+<div class="mono flex justify-around text-xl font-black"><span id="l1" dir="auto">X 0.0°</span><span id="l2" dir="auto">Y 0.0°</span></div>
 <details class="text-sm text-zinc-400"><summary>محاكاة (للكمبيوتر)</summary>
 <input id="sx" type="range" min="-45" max="45" step=".1" value="0"><input id="sy" type="range" min="-45" max="45" step=".1" value="0"></details></div></section>
 </main>
 
-<nav class="glass flex mx-2 mb-2" style="padding-bottom:env(safe-area-inset-bottom,0)">
-<button class="dk act" data-p="0"><span>🪧</span>اليافطة</button><button class="dk" data-p="1"><span>🚨</span>الحارس</button>
-<button class="dk" data-p="2"><span>👻</span>الشبح</button><button class="dk" data-p="3"><span>📏</span>المسطرة</button><button class="dk" data-p="4"><span>🎯</span>الميزان</button></nav>
+<nav class="glass flex mx-2 mb-2">
+<button class="dk act" data-p="0"><span>🪧</span><em>اليافطة</em></button><button class="dk" data-p="1"><span>🚨</span><em>الحارس</em></button>
+<button class="dk" data-p="2"><span>👻</span><em>الشبح</em></button><button class="dk" data-p="3"><span>📏</span><em>المسطرة</em></button><button class="dk" data-p="4"><span>🎯</span><em>الميزان</em></button></nav>
 
 <!-- Sign fullscreen -->
 <div id="fs" class="ov"><div id="fsBox"><div id="fsT"></div></div>
@@ -144,13 +159,13 @@ function go(i){$$('.pg').forEach((p,k)=>p.classList.toggle('act',k==i));$$('.dk'
 $$('.dk').forEach(b=>b.onclick=()=>go(+b.dataset.p));
 
 /* 1 SIGN */
-let rot=false,locked=false,mic=null,lastTap=0;
+let auto=true,rot=false,locked=false,mic=null,lastTap=0;
 $$('#tpl .btn').forEach(b=>b.onclick=()=>$('#sTxt').value=b.dataset.t);
-function fit(){const W=innerWidth,H=innerHeight,bw=(rot?H:W)*.9,bh=(rot?W:H)*.9,box=$('#fsBox'),t=$('#fsT');
-box.style.width=bw+'px';box.style.height=bh+'px';box.style.transform=`translate(-50%,-50%) rotate(${rot?90:0}deg)`;t.style.width='100%';
-let lo=8,hi=900;while(hi-lo>2){const m=(lo+hi)>>1;t.style.fontSize=m+'px';(t.scrollWidth<=bw&&t.scrollHeight<=bh)?lo=m:hi=m}t.style.fontSize=lo+'px'}
-$('#sGo').onclick=async()=>{$('#fsT').textContent=$('#sTxt').value||' ';$('#fs').classList.add('on');fit();try{await document.documentElement.requestFullscreen()}catch(e){}if($('#reactT').checked)micOn()};
-$('#fsR').onclick=()=>{rot=!rot;fit()};
+function fit(){const W=innerWidth,H=innerHeight,box=$('#fsBox'),t=$('#fsT');
+const m=r=>{const bw=(r?H:W)*.97,bh=(r?W:H)*.97;box.style.width=bw+'px';box.style.height=bh+'px';t.style.width='100%';let lo=8,hi=1400;while(hi-lo>2){const k=(lo+hi)>>1;t.style.fontSize=k+'px';(t.scrollWidth<=bw&&t.scrollHeight<=bh)?lo=k:hi=k}return lo};
+if(auto)rot=m(true)>m(false)*1.05;const f=m(rot);box.style.transform=`translate(-50%,-50%) rotate(${rot?90:0}deg)`;t.style.fontSize=f+'px'}
+$('#sGo').onclick=async()=>{$('#fsT').textContent=$('#sTxt').value||' ';$('#fs').classList.add('on');auto=true;fit();try{await document.documentElement.requestFullscreen()}catch(e){}if($('#reactT').checked)micOn()};
+$('#fsR').onclick=()=>{auto=false;rot=!rot;fit()};
 $('#fsX').onclick=()=>{$('#fs').classList.remove('on');micOff();try{document.fullscreenElement&&document.exitFullscreen()}catch(e){}};
 addEventListener('resize',()=>{$('#fs').classList.contains('on')&&fit();drawR()});
 $('#corner').onpointerdown=e=>{const n=Date.now();if(n-lastTap<350){locked=!locked;$('#fsCtl').style.display=locked?'none':'flex';$('#corner').textContent=locked?'🔒':'';vib(40)}lastTap=n};
@@ -192,23 +207,43 @@ function shock(){const s=$('#shock');s.classList.add('on');vib([100,50,200]);[50
 $('#shock').onclick=()=>$('#shock').classList.remove('on');
 
 /* 4 RULER */
-let ppm=(()=>{try{return+localStorage.getItem('ppm')}catch(e){return 0}})()||3.78;const rc=$('#rc'),p3=$('#p3');
+let mode=0,uI=0;const U=[1,.1,1/25.4];let ppm=(()=>{try{return+localStorage.getItem('ppm')}catch(e){return 0}})()||3.78;const rc=$('#rc'),p3=$('#p3');
 function setCal(px){ppm=px/85.6;try{localStorage.setItem('ppm',ppm)}catch(e){}$('#cal').value=px;$('#card').style.width=px+'px';$('#card').style.height=(px/1.586)+'px';$('#cardR').textContent='85.60 mm';drawR();rd()}
 $('#cal').oninput=e=>setCal(+e.target.value);
 function drawR(){const w=p3.clientWidth,h=p3.clientHeight;if(!w)return;const d=devicePixelRatio||1;rc.width=w*d;rc.height=h*d;const x=rc.getContext('2d');x.scale(d,d);x.fillStyle='#0a0818';x.fillRect(0,0,w,h);
-x.strokeStyle='#CCFF00';x.fillStyle='#CCFF00';x.font='11px monospace';x.textAlign='right';
-for(let i=0;i*ppm<h;i++){const y=i*ppm,L=i%10==0?30:i%5==0?20:11;x.globalAlpha=i%10==0?1:.8;x.beginPath();x.moveTo(w,y+.5);x.lineTo(w-L,y+.5);x.stroke();if(i%10==0&&i)x.fillText(i/10,w-34,y+4)}x.globalAlpha=1}
-function rd(){const a=$('#ln1').offsetTop,b=$('#ln2').offsetTop,mm=Math.abs(b-a)/ppm;$('#mm').textContent=mm.toFixed(1)+' mm';$('#cm').textContent=(mm/10).toFixed(2)+' cm'}
+x.strokeStyle=x.fillStyle='#CCFF00';x.font='11px monospace';const inch=uI==2,sp=inch?ppm*25.4/8:ppm,M=inch?8:10,m5=inch?4:5,Lf=i=>i%M==0?30:i%m5==0?20:11;
+x.textAlign='right';for(let i=0;i*sp<h;i++){const y=i*sp;x.globalAlpha=i%M==0?1:.8;x.beginPath();x.moveTo(w,y+.5);x.lineTo(w-Lf(i),y+.5);x.stroke();if(i%M==0&&i)x.fillText(i/M,w-34,y+4)}
+x.textAlign='center';for(let i=0;i*sp<w;i++){const q=i*sp;x.globalAlpha=i%M==0?1:.8;x.beginPath();x.moveTo(q+.5,h);x.lineTo(q+.5,h-Lf(i));x.stroke();if(i%M==0&&i)x.fillText(i/M,q,h-36)}x.globalAlpha=1}
+function rd(){const n=mm=>(mm*U[uI]).toFixed(uI?2:1),u=['mm','cm','in'][uI];let t,s;
+if(!mode){const mm=Math.abs($('#ln2').offsetTop-$('#ln1').offsetTop)/ppm;t=n(mm)+' '+u;s=uI?mm.toFixed(1)+' mm':(mm/10).toFixed(2)+' cm'}
+else{const a=$('#h1'),b=$('#h2'),x1=parseFloat(a.style.left),y1=parseFloat(a.style.top),x2=parseFloat(b.style.left),y2=parseFloat(b.style.top),w=Math.abs(x2-x1)/ppm,h=Math.abs(y2-y1)/ppm,dg=Math.hypot(w,h),r=$('#mr'),m=$('#md');
+r.setAttribute('x',Math.min(x1,x2));r.setAttribute('y',Math.min(y1,y2));r.setAttribute('width',Math.abs(x2-x1));r.setAttribute('height',Math.abs(y2-y1));
+m.setAttribute('x1',x1);m.setAttribute('y1',y1);m.setAttribute('x2',x2);m.setAttribute('y2',y2);
+const T=(id,tx,X,Y)=>{const e=$(id);e.textContent=tx;e.setAttribute('x',X);e.setAttribute('y',Y)};
+T('#tw',n(w),(x1+x2)/2,Math.min(y1,y2)-8);T('#th',n(h),Math.min(x1,x2)-26,(y1+y2)/2);T('#td',n(dg),(x1+x2)/2+30,(y1+y2)/2-10);
+t=n(w)+' × '+n(h)+' '+u;s='قطر '+n(dg)+' · مساحة '+(w*h/100).toFixed(1)+' سم²'}
+$('#mm').textContent=t;$('#cm').textContent=s}
 $$('.ln').forEach(l=>{l.onpointerdown=e=>{l.setPointerCapture(e.pointerId);l.dr=1};l.onpointermove=e=>{if(!l.dr)return;l.style.top=clamp(e.clientY-p3.getBoundingClientRect().top,0,p3.clientHeight)+'px';rd()};l.onpointerup=l.onpointercancel=()=>l.dr=0});
+function setMode(m){mode=m;$$('.ln').forEach(l=>l.style.display=m?'none':'block');$$('.hd').forEach(l=>l.style.display=m?'block':'none');$('#ms').style.display=m?'block':'none';$('#mLn').classList.toggle('sel',!m);$('#mRc').classList.toggle('sel',!!m);rd()}
+$('#mLn').onclick=()=>setMode(0);$('#mRc').onclick=()=>setMode(1);
+$('#mU').onclick=()=>{uI=(uI+1)%3;$('#mU').textContent=['mm','cm','in'][uI];drawR();rd()};
+$$('.hd').forEach(l=>{l.onpointerdown=e=>{l.setPointerCapture(e.pointerId);l.dr=1};l.onpointermove=e=>{if(!l.dr)return;const r=p3.getBoundingClientRect();l.style.left=clamp(e.clientX-r.left,0,p3.clientWidth)+'px';l.style.top=clamp(e.clientY-r.top,0,p3.clientHeight)+'px';rd()};l.onpointerup=l.onpointercancel=()=>l.dr=0});
+$('#h1').style.cssText='left:90px;top:190px';$('#h2').style.cssText='left:250px;top:330px';
 $('#ln1').style.top='200px';$('#ln2').style.top='320px';
-new ResizeObserver(drawR).observe(p3);setCal(clamp(ppm*85.6,200,520));
+new ResizeObserver(drawR).observe(p3);setCal(clamp(ppm*85.6,200,520));setMode(0);
 
 /* 5 LEVEL */
-let ox=0,oy=0,was=false;
-function lvl(x,y){ox=x;oy=y;const k=100/45,bx=clamp(x*k,-120,120),by=clamp(y*k,-120,120),ok=Math.abs(x)<=.8&&Math.abs(y)<=.8,col=ok?'#10B981':'#00F5D4';
-const B=$('#lB');B.setAttribute('cx',bx);B.setAttribute('cy',by);B.setAttribute('fill',col);B.style.color=col;$('#lT').setAttribute('stroke',ok?'#10B981':'#fff6');$('#lx').textContent=x.toFixed(1);$('#ly').textContent=y.toFixed(1);
-$('#lx').style.color=$('#ly').style.color=ok?'#10B981':'#fff';if(ok&&!was){vib(60);beep(1000,.18)}was=ok}
-$('#lPerm').onclick=async()=>{try{if(DeviceOrientationEvent.requestPermission&&(await DeviceOrientationEvent.requestPermission())!='granted')return}catch(e){}
-addEventListener('deviceorientation',e=>{if(e.gamma==null)return;$('#sx').value=e.gamma;$('#sy').value=e.beta;lvl(e.gamma,e.beta)});$('#lPerm').textContent='الحساسات تعمل ✓'};
+let lm=0,was=false;const DG=Math.PI/180;
+function lvl(p,q){const ok=lm==1?Math.abs(p)<=.8:lm==2?Math.abs(q)<=.8:Math.abs(p)<=.8&&Math.abs(q)<=.8,col=ok?'#10B981':'#00F5D4';
+if(!lm){const k=100/45,B=$('#lB');B.setAttribute('cx',clamp(p*k,-120,120));B.setAttribute('cy',clamp(q*k,-120,120));B.setAttribute('fill',col);B.style.color=col;$('#lT').setAttribute('stroke',ok?'#10B981':'#fff6')}
+else{const B=$('#tB');B.setAttribute('cx',clamp((lm==1?p:q)*30,-105,105));B.setAttribute('fill',col);B.style.filter=`drop-shadow(0 0 8px ${col})`}
+$('#l1').textContent=lm==0?'X '+p.toFixed(1)+'°':lm==1?'الميل '+p.toFixed(1)+'°':'ميل رأسي '+q.toFixed(1)+'°';
+$('#l2').textContent=lm==0?'Y '+q.toFixed(1)+'°':lm==1?'انحدار '+(Math.tan(p*DG)*100).toFixed(1)+'%':'انحراف '+p.toFixed(1)+'°';
+$('#l1').style.color=ok?'#10B981':'#fff';if(ok&&!was){vib(60);beep(1000,.18)}was=ok}
+$$('.lm').forEach(b=>b.onclick=()=>{lm=+b.dataset.m;$$('.lm').forEach(x=>x.classList.toggle('sel',x==b));$('#lv').style.display=lm?'none':'block';$('#ltw').style.display=lm?'block':'none';$('#lt').style.transform=lm==2?'rotate(90deg)':'';lvl(+$('#sx').value,+$('#sy').value)});
+$('#lPerm').onclick=async()=>{for(const C of[DeviceOrientationEvent,DeviceMotionEvent])try{C.requestPermission&&await C.requestPermission()}catch(e){}$('#lPerm').textContent='الحساسات تعمل ✓'};
+addEventListener('deviceorientation',e=>{if(lm||e.gamma==null)return;$('#sx').value=e.gamma;$('#sy').value=e.beta;lvl(e.gamma,e.beta)});
+addEventListener('devicemotion',e=>{if(!lm)return;const a=e.accelerationIncludingGravity;if(!a||a.x==null)return;const X=a.x,Y=a.y,Z=a.z,sg=Math.sign(Y)||1,D=180/Math.PI;
+if(lm==1)lvl(D*(Math.abs(Y)>=Math.abs(X)?Math.atan2(X*sg,Math.abs(Y)):Math.atan2(Y*(Math.sign(X)||1),Math.abs(X))),0);else lvl(D*Math.atan2(X*sg,Math.abs(Y)),D*Math.atan2(Z*sg,Math.abs(Y)))});
 ['#sx','#sy'].forEach(s=>$(s).oninput=()=>lvl(+$('#sx').value,+$('#sy').value));lvl(0,0);
 </script></body></html>
