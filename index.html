@@ -65,6 +65,10 @@ nav.glass{display:flex;justify-content:center;gap:6px;width:max-content;max-widt
 .dk.act em{max-width:90px;opacity:1;margin-inline-start:6px;font-weight:900}
 .dk.act span{transform:none;filter:none}
 #fsT{line-height:.95;letter-spacing:-.01em}#fs{border:0;border-radius:0;overflow:hidden;box-shadow:inset 0 0 90px var(--v)}
+@keyframes bt{0%,100%{transform:scale(1)}15%{transform:scale(1.4)}35%{transform:scale(1.05)}}
+.plh{display:inline-block;animation:bt 1s infinite}
+#plCard{--pc:#00ff88;transition:.3s}#plCard.al{--pc:#ff0055;border-color:#ff0055;box-shadow:0 0 40px #ff0055aa,inset 0 0 40px #ff005533}
+#plEc{background:rgba(5,3,15,.85)}
 </style></head>
 <body class="h-[100dvh] flex flex-col select-none overflow-hidden"><div class="aur"><i></i><i></i><i></i></div>
 <div id="wkl"></div>
@@ -100,16 +104,16 @@ nav.glass{display:flex;justify-content:center;gap:6px;width:max-content;max-widt
 <button id="gHold" class="absolute bottom-6 left-6 w-24 h-24 rounded-full text-3xl" style="border:3px solid var(--c);background:rgba(0,245,212,.15);box-shadow:0 0 20px var(--c);touch-action:none">☝️</button>
 <button id="gClose" class="btn r absolute top-4 right-4">إغلاق</button></div></section>
 
-<!-- 4 WEIGHT -->
-<section class="pg" id="p3"><div class="glass p-4 text-center">
-<h2 style="color:var(--c)">⚖️ ميزان اللمس</h2><div id="ws"><p class="text-xs text-zinc-300 mt-2" dir="rtl">ضع الجسم على المربع أو اضغط بإصبعك: الهاتف يقيس <b>مساحة/قوة التلامس</b> ويحوّلها لوزن بعد المعايرة. الأفضل جسم مرن موصِّل للكهرباء (ثمرة، كيس ماء). ثبّت الهاتف على سطح مستوٍ.</p>
-<div id="wp" class="mt-3 grid place-items-center text-zinc-400 text-sm" style="height:210px;border:2px dashed var(--c);border-radius:22px;touch-action:none;background:rgba(34,229,255,.06)">ضع الجسم هنا</div>
-<div id="sr" class="mono text-4xl font-black mt-3" style="color:var(--v)">— جم</div>
-<div id="si" class="mono text-xs text-zinc-300 mt-1" dir="auto">القيمة الخام: 0</div>
-<div class="flex gap-2 items-center justify-center mt-3"><span class="text-sm">الوزن المعلوم (جم)</span><input id="wg2" type="number" inputmode="decimal" value="200" class="mono p-2 text-center" style="width:90px"></div>
-<button id="sadd" class="btn w-full mt-2">➕ سجّل آخر قراءة كنقطة معايرة</button>
-<div id="spl" class="text-xs text-zinc-400 mt-2" dir="auto"></div>
-<button id="sclr" class="text-xs text-zinc-400 mt-2 underline">مسح نقاط المعايرة</button></div></div></section>
+<!-- 4 PULSE -->
+<section class="pg" id="p3"><video id="plV" playsinline muted style="position:fixed;left:0;top:0;width:2px;height:2px;opacity:0;pointer-events:none"></video>
+<div id="plCard" class="glass p-4 text-center"><h2 id="plT" style="color:var(--pc)">رادار النبض وكاشف الكذب 🫀⚡</h2>
+<p class="text-xs text-zinc-300 mt-1" dir="rtl">ضع طرف إصبعك بالكامل على الكاميرا الخلفية والفلاش لقياس نبضك الحقيقي أو استجواب صاحبك! <span class="text-zinc-500">(للتسلية فقط — ليس جهازاً طبياً)</span></p>
+<div class="relative mt-3"><canvas id="plEc" class="w-full" style="height:150px;border-radius:18px;border:1px solid rgba(0,255,136,.25)"></canvas><div id="plMsg" class="absolute inset-0 place-items-center text-sm font-bold" style="display:grid;white-space:pre-line;padding:12px;color:#c9c7e6;pointer-events:none">اضغط «بدء الفحص»</div></div>
+<div class="grid grid-cols-3 gap-2 mt-3"><div class="glass p-2"><div class="text-xs text-zinc-400">النبض BPM</div><div class="mono text-3xl font-black" style="color:var(--pc);text-shadow:0 0 14px var(--pc)"><span id="plHb" class="plh">🫀</span> <span id="plBpm">--</span></div></div><div class="glass p-2"><div class="text-xs text-zinc-400">مؤشر التوتر</div><div id="plSt" class="text-base font-black mt-2" dir="auto">--</div></div><div class="glass p-2"><div class="text-xs text-zinc-400">جودة الإشارة</div><div id="plSg" class="text-sm font-bold mt-2" style="color:#9a97b3">لا يوجد إصبع</div></div></div>
+<label class="flex items-center justify-between glass p-3 mt-3"><span class="font-bold text-sm">وضع التحقيق وكاشف الكذب 🚨</span><input type="checkbox" id="plLie"></label>
+<div id="plQw" style="display:none" class="mt-3"><div id="plQ" class="flex flex-wrap gap-2 justify-center"></div><button id="plAsk" class="btn r w-full mt-3">اسأل السؤال الآن 🎤</button></div>
+<div id="plBan"></div>
+<div class="flex gap-2 mt-3"><button id="plGo" class="btn v flex-1">بدء الفحص 🫀</button><button id="plMu" class="btn">🔊</button></div></div></section>
 
 <!-- 5 LEVEL -->
 <section class="pg" id="p4"><div class="glass p-4 text-center space-y-3">
@@ -128,7 +132,7 @@ nav.glass{display:flex;justify-content:center;gap:6px;width:max-content;max-widt
 
 <nav class="glass flex mx-2 mb-2">
 <button class="dk act" data-p="0"><span>🪧</span><em>اليافطة</em></button><button class="dk" data-p="1"><span>🚨</span><em>الحارس</em></button>
-<button class="dk" data-p="2"><span>👻</span><em>الشبح</em></button><button class="dk" data-p="3"><span>⚖️</span><em>الوزن</em></button><button class="dk" data-p="4"><span>🎯</span><em>الميزان</em></button></nav>
+<button class="dk" data-p="2"><span>👻</span><em>الشبح</em></button><button class="dk" data-p="3"><span>🫀</span><em>النبض</em></button><button class="dk" data-p="4"><span>🎯</span><em>الميزان</em></button></nav>
 
 <!-- Sign fullscreen -->
 <div id="fs" class="ov"><div id="fsBox"><div id="fsT"></div></div>
@@ -155,7 +159,7 @@ let wl;async function wake(){try{wl=await navigator.wakeLock.request('screen');$
 wake();document.addEventListener('visibilitychange',()=>document.visibilityState=='visible'&&wake());
 document.addEventListener('pointerdown',()=>{if(!wl||wl.released)wake()},{passive:true});
 /* tabs */
-function go(i){$$('.pg').forEach((p,k)=>p.classList.toggle('act',k==i));$$('.dk').forEach(b=>b.classList.toggle('act',b.dataset.p==i));if(i!=2)$('#gBox').classList.remove('on')}
+function go(i){$$('.pg').forEach((p,k)=>p.classList.toggle('act',k==i));$$('.dk').forEach(b=>b.classList.toggle('act',b.dataset.p==i));if(i!=3&&window.pulseStop)window.pulseStop();if(i!=2)$('#gBox').classList.remove('on')}
 $$('.dk').forEach(b=>b.onclick=()=>go(+b.dataset.p));
 
 /* 1 SIGN */
@@ -207,20 +211,50 @@ gb.addEventListener('pointerup',e=>{if(Math.abs(e.clientX-sx)>70&&Math.abs(e.cli
 function shock(){const s=$('#shock');s.classList.add('on');vib([100,50,200]);[500,420,340,260].forEach((f,i)=>beep(f,.18,'square',.25,i*.17));beep(120,.5,'sawtooth',.25,.7);setTimeout(()=>s.classList.remove('on'),2600)}
 $('#shock').onclick=()=>$('#shock').classList.remove('on');
 
-/* 4b SCREEN SCALE */
-let wpts=(()=>{try{return JSON.parse(localStorage.getItem('wpts'))||[]}catch(e){return[]}})(),wptr=new Map(),whist=[],wlatch=0,wsm=0;const wp=$('#wp');
-const wpsv=()=>{try{localStorage.setItem('wpts',JSON.stringify(wpts))}catch(e){}};
-const wmet=e=>{const a=(e.width||0)*(e.height||0);return a>4?a:(e.pressure&&e.pressure!==.5?e.pressure*100:0)};
-function wfit(x){const P=wpts;if(!P.length||x<=0)return null;if(P.length==1)return P[0].m*x/P[0].x;const L=P.map(q=>[Math.log(q.x),Math.log(q.m)]),n=L.length,mx=L.reduce((a,b)=>a+b[0],0)/n,my=L.reduce((a,b)=>a+b[1],0)/n;let sxx=0,sxy=0;L.forEach(([a,b])=>{sxx+=(a-mx)**2;sxy+=(a-mx)*(b-my)});const b=sxx>1e-9?Math.min(2,Math.max(.3,sxy/sxx)):1;return Math.exp(my-b*mx)*Math.pow(x,b)}
-function wshow(x,fin){const g=wfit(x),R=$('#sr');R.textContent=g==null?'— جم':g.toFixed(0)+' جم';R.style.opacity=fin?1:.7;$('#si').textContent=fin&&x<=0?'لا يصل أي قياس للمس — جهازك/متصفحك لا يرسل مساحة أو ضغط اللمس':'القيمة الخام: '+x.toFixed(1)+(fin?' (آخر قراءة ثابتة)':'')+(g!=null?' · ≈ '+(g/28.35).toFixed(1)+' أونصة':'')}
-const wupd=()=>{let v=0;wptr.forEach(q=>v+=q);wsm+=(v-wsm)*.35;whist.push(wsm);if(whist.length>120)whist.shift();wshow(wsm,false)};
-wp.onpointerdown=e=>{wp.setPointerCapture(e.pointerId);if(!wptr.size){whist=[];wsm=0}wptr.set(e.pointerId,wmet(e));wupd()};
-wp.onpointermove=e=>{if(wptr.has(e.pointerId)){wptr.set(e.pointerId,wmet(e));wupd()}};
-wp.onpointerup=wp.onpointercancel=e=>{wptr.delete(e.pointerId);if(!wptr.size){const h=whist.slice(-20).sort((a,b)=>a-b);wlatch=h.length?h[h.length>>1]:0;vib(40);wshow(wlatch,true)}else wupd()};
-const wpl=()=>$('#spl').textContent=wpts.length?'نقاط المعايرة: '+wpts.map(q=>q.m+' جم ← '+q.x.toFixed(1)).join(' · ')+(wpts.length<2?' (أضف نقطة ثانية بوزن مختلف لدقة أفضل)':''):'لا توجد معايرة — ضع وزناً معلوماً، ثم اكتب وزنه وسجّل النقطة';
-$('#sadd').onclick=()=>{const m=+$('#wg2').value;if(!(m>0)||!(wlatch>0)){$('#spl').textContent='ضع جسماً على المربع أولاً ثم اكتب وزنه';return}wpts.push({x:wlatch,m});wpsv();wpl()};
-$('#sclr').onclick=()=>{wpts=[];wpsv();wpl();wshow(0,false)};
-wpl();
+/* 4 PULSE */
+(()=>{
+const pv=$('#plV'),cv=document.createElement('canvas');cv.width=cv.height=40;const px=cv.getContext('2d',{willReadFrequently:true}),ec=$('#plEc'),card=$('#plCard'),
+Q=['بتحبني بجد ولا مصلحة؟','أكلت آخر قطعة في التلاجة؟','معاك فلوس ومخبي؟','كنت بتتكلم عني من ورايا؟','قلت إنك مذاكر وإنت بتلعب؟'];
+let run=false,raf=0,stream=null,ctx=null,mute=false,plast=0,bl=0,fcount=0,nof=99,fing=false,sb=[],wave=[],ph=[],lastPk=0,pks=[],bpm=0,amp=0,lieOn=false,base=null,bt0=0,bsum=0,bn=0,asking=false,tA=0,qi=0,rigArmed=false,rigAt=0,vt=0,liar=false,torchOn=false,lt=0;
+const msg=t=>{const m=$('#plMsg');m.textContent=t;m.style.display=t?'grid':'none'};
+const sig=(t,c)=>{const e=$('#plSg');e.textContent=t;e.style.color=c};
+function ban(t,c){const b=$('#plBan');if(!t){b.style.display='none';b.textContent='';return}if(b.textContent===t&&b.dataset.c===(c||'info'))return;b.dataset.c=c||'info';b.style.display='block';const C={info:['#9B5CFF','rgba(155,92,255,.15)'],ok:['#00ff88','rgba(0,255,136,.15)'],bad:['#ff0055','rgba(255,0,85,.2)']}[c||'info'];Object.assign(b.style,{marginTop:'12px',padding:'14px',borderRadius:'18px',fontWeight:'900',fontSize:c=='info'?'.9rem':'1.15rem',color:C[0],border:'1px solid '+C[0],background:C[1],boxShadow:c=='bad'?'0 0 30px #ff0055aa':c=='ok'?'0 0 24px #00ff8866':'none'});b.textContent=t}
+function pb(f,d){if(!ctx||mute)return;try{const o=ctx.createOscillator(),g=ctx.createGain(),t=ctx.currentTime;o.frequency.value=f;g.gain.setValueAtTime(.15,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g);g.connect(ctx.destination);o.start(t);o.stop(t+d)}catch(e){}}
+function siren(){if(!ctx||mute)return;try{const o=ctx.createOscillator(),g=ctx.createGain(),t=ctx.currentTime;o.type='sawtooth';for(let i=0;i<6;i++)o.frequency.setValueAtTime(i%2?950:600,t+i*.2);g.gain.setValueAtTime(.12,t);g.gain.linearRampToValueAtTime(0,t+1.3);o.connect(g);g.connect(ctx.destination);o.start(t);o.stop(t+1.3)}catch(e){}}
+function draw(){const d=devicePixelRatio||1,w=ec.clientWidth,h=ec.clientHeight;if(!w)return;if(ec.width!=Math.round(w*d)){ec.width=Math.round(w*d);ec.height=Math.round(h*d)}const x=ec.getContext('2d');x.setTransform(d,0,0,d,0,0);x.clearRect(0,0,w,h);for(let i=1;i<w/25;i++){x.fillStyle='rgba(0,255,136,.07)';x.fillRect(i*25,0,1,h)}for(let j=1;j<h/25;j++)x.fillRect(0,j*25,w,1);
+const col=card.classList.contains('al')?'#ff0055':'#00ff88',n=wave.length,A=Math.max(amp,.3);x.strokeStyle=col;x.shadowColor=col;x.shadowBlur=10;x.lineWidth=2.5;x.lineJoin='round';x.beginPath();
+if(!n||!fing){x.moveTo(0,h/2);x.lineTo(w,h/2)}else wave.forEach((v,i)=>{const X=w-(n-1-i)*(w/200),Y=h/2-clamp(v/A,-1.2,1.2)*h*.38;i?x.lineTo(X,Y):x.moveTo(X,Y)});x.stroke()}
+function setBpm(b){bpm=b;$('#plBpm').textContent=Math.round(b);$('#plHb').style.animationDuration=(60/b).toFixed(2)+'s'}
+function beat(){const iv=[];for(let i=Math.max(1,pks.length-4);i<pks.length;i++)iv.push(pks[i]-pks[i-1]);const v=iv.filter(x=>x>=375&&x<=1200).sort((a,b)=>a-b);if(v.length>=2){const raw=clamp(60000/v[v.length>>1],50,160);setBpm(bpm?bpm+(raw-bpm)*.4:raw)}pb(800,.06);vib(25)}
+function stress(){const e=$('#plSt');if(!bpm){e.textContent='--';return}const k=base?6:3,p=clamp(Math.round(15+(bpm-(base||75))*k),0,100);e.textContent=p+'% '+(liar?'بيكذب! 🚨':p<35?'هادئ 😎':'متوتر 😰');e.style.color=liar||p>=65?'#ff0055':'#00ff88'}
+function verdict(lie){asking=false;rigAt=0;liar=lie;clearTimeout(vt);if(lie){card.classList.add('al');ban('🚨 قفشتك! كذّاب (النبض ضرب في السما) 🚨','bad');siren();vib([200,100,200])}else ban('✅ صريح وبريء (أعصابه في تلاجة)','ok');vt=setTimeout(()=>{liar=false;card.classList.remove('al');if(base!=null)ban('اختر سؤالاً جديداً واضغط «اسأل»','info')},5000)}
+function lieStep(now,fin){stress();if(!lieOn)return;
+if(base==null){if(!fin||!bpm){bt0=0;bsum=bn=0;ban('ضع إصبعك وانتظر ظهور النبض… ثم هدّي','info');return}if(!bt0)bt0=now;bsum+=bpm;bn++;const left=5-(now-bt0)/1000;if(left>0){ban('🧘 جارٍ تسجيل نبضك الأساسي… '+Math.ceil(left)+' ث — اسكت وهدّي','info');return}base=bsum/bn;$('#plQw').style.display='block';ban('✅ النبض الأساسي '+Math.round(base)+' — اختر سؤالاً واضغط «اسأل»','info');return}
+if(asking){const t=now-tA;if(!fin||bpm>=base+8||(rigAt&&now>=rigAt))return verdict(true);if(t>=6000)return verdict(false);ban('🎤 «'+Q[qi]+'» — جارٍ الفحص… '+Math.ceil((6000-t)/1000)+' ث','info')}}
+function loop(ts){if(!run)return;raf=requestAnimationFrame(loop);if(ts-plast<33||pv.readyState<2)return;plast=ts;
+px.drawImage(pv,0,0,40,40);const D=px.getImageData(0,0,40,40).data;let r=0,g=0,b=0;for(let i=0;i<D.length;i+=4){r+=D[i];g+=D[i+1];b+=D[i+2]}const N=D.length/4;r/=N;g/=N;b/=N;
+const ok=r>90&&r>1.7*g&&r>1.7*b,now=performance.now();
+if(ok){nof=0;if(!fing){fing=true;fcount=0;bl=r;sb=[];wave=[];ph=[];pks=[];lastPk=0}}else{nof++;if(nof>10&&fing){fing=false;bpm=0;$('#plBpm').textContent='--'}}
+if(!fing){msg('Waiting for finger...\nغطِّ الكاميرا بإصبعك'+(torchOn?'':'\n(الفلاش غير مدعوم: قرّب إصبعك من ضوء ساطع)'));sig('لا يوجد إصبع','#9a97b3');draw();lieStep(now,false);return}
+fcount++;bl+=(r-bl)*.04;sb.push(bl-r);if(sb.length>5)sb.shift();const s=sb.reduce((a,c)=>a+c,0)/sb.length;wave.push(s);if(wave.length>200)wave.shift();
+amp=0;for(let i=Math.max(0,wave.length-90);i<wave.length;i++)amp=Math.max(amp,Math.abs(wave[i]));
+ph.push({t:now,s});if(ph.length>3)ph.shift();
+if(ph.length==3&&fcount>60&&amp>.15&&ph[1].s>ph[0].s&&ph[1].s>=ph[2].s&&ph[1].s>.4*amp&&ph[1].t-lastPk>330){lastPk=ph[1].t;pks.push(lastPk);if(pks.length>6)pks.shift();beat()}
+msg(fcount<60?'جارٍ التقاط النبض… ثبّت إصبعك':'');sig(amp>.6?'ممتازة ✅':amp>.25?'مقبولة 👍':'ضعيفة — اضغط بثبات',amp>.25?'#00ff88':'#FFD60A');draw();lieStep(now,true)}
+async function start(){try{ctx=new(window.AudioContext||window.webkitAudioContext)();stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:320},height:{ideal:240},frameRate:{ideal:30}},audio:false});pv.srcObject=stream;await pv.play();
+const tr=stream.getVideoTracks()[0];torchOn=false;try{if(tr.getCapabilities&&tr.getCapabilities().torch){await tr.applyConstraints({advanced:[{torch:true}]});torchOn=true}}catch(e){}
+run=true;plast=0;fing=false;nof=99;$('#plGo').textContent='إيقاف ⏹';$('#plGo').className='btn r flex-1';raf=requestAnimationFrame(loop)}catch(e){stop();msg('تعذّر فتح الكاميرا — اسمح بالإذن أو افتح الملف مباشرة في المتصفح')}}
+function stop(){run=false;cancelAnimationFrame(raf);if(stream)stream.getTracks().forEach(t=>t.stop());stream=null;pv.srcObject=null;if(ctx){try{ctx.close()}catch(e){}ctx=null}
+fing=false;wave=[];bpm=0;asking=false;rigAt=0;base=null;bt0=0;bsum=bn=0;liar=false;clearTimeout(vt);$('#plQw').style.display='none';card.classList.remove('al');$('#plBpm').textContent='--';$('#plSt').textContent='--';$('#plGo').textContent='بدء الفحص 🫀';$('#plGo').className='btn v flex-1';msg('اضغط «بدء الفحص»');sig('لا يوجد إصبع','#9a97b3');draw();ban(lieOn?'اضغط بدء الفحص ثم ضع إصبعك — سيُسجَّل نبضك الأساسي أولاً':'')}
+window.pulseStop=()=>{if(run)stop()};
+$('#plGo').onclick=()=>run?stop():start();
+$('#plMu').onclick=()=>{mute=!mute;$('#plMu').textContent=mute?'🔇':'🔊'};
+$('#plLie').onchange=e=>{lieOn=e.target.checked;base=null;bt0=0;bsum=bn=0;asking=false;rigAt=0;$('#plQw').style.display='none';ban(lieOn?(run?'':'اضغط بدء الفحص ثم ضع إصبعك — سيُسجَّل نبضك الأساسي أولاً'):'')};
+$('#plAsk').onclick=()=>{if(!run||!fing||base==null||asking)return;asking=true;tA=performance.now();rigAt=rigArmed?tA+3000:0;rigArmed=false;pb(1200,.1);vib(50)};
+$('#plT').onpointerdown=()=>{const n=Date.now();if(n-lt<350&&lieOn){if(asking)rigAt=performance.now()+3000;else rigArmed=true}lt=n};
+Q.forEach((q,i)=>{const b=document.createElement('button');b.className='btn'+(i?'':' sel');b.style.cssText='padding:.4rem .7rem;font-size:12px';b.textContent=q;b.onclick=()=>{qi=i;[...$('#plQ').children].forEach((c,k)=>c.classList.toggle('sel',k==i))};$('#plQ').appendChild(b)});
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&run)stop()});
+})();
 
 /* 5 LEVEL */
 let lm=0,was=false,sp=0,sq=0;const sm=(p,q)=>{sp+=(p-sp)*.12;sq+=(q-sq)*.12;lvl(sp,sq)};const DG=Math.PI/180;
