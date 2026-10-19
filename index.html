@@ -103,9 +103,12 @@ nav.glass{display:flex;justify-content:center;gap:6px;width:max-content;max-widt
 <!-- 4 RULER -->
 <section class="pg" id="p3" style="padding:0;overflow:hidden;touch-action:none">
 <canvas id="rc" class="absolute inset-0 w-full h-full"></canvas>
-<div class="absolute top-2 left-3 right-14 z-10 flex gap-2" style="touch-action:auto"><button id="mCal" class="btn flex-1" style="padding:.5rem;font-size:13px">🎯 معايرة</button><button id="mU" class="btn flex-1" style="padding:.5rem;font-size:13px">mm</button></div>
+<div class="absolute top-2 left-3 right-14 z-10 flex gap-2" style="touch-action:auto"><button id="mCal" class="btn flex-1" style="padding:.5rem;font-size:13px">🎯 معايرة</button><button id="mCam" class="btn v flex-1" style="padding:.5rem;font-size:13px">📷 كاميرا</button><button id="mU" class="btn flex-1" style="padding:.5rem;font-size:13px">mm</button></div>
 <div id="card" style="display:none;position:absolute;left:50%;top:64px;transform:translateX(-50%);border:2px dashed var(--v);border-radius:12px;z-index:3;pointer-events:none;background:rgba(198,255,61,.07)"><span style="position:absolute;inset:0;display:grid;place-items:center;font-size:12px;color:var(--v);text-align:center">💳 كارت بنك<br>85.6×54 مم</span></div>
 <div id="cp" class="absolute left-3 right-14 glass p-3 z-10 text-xs" style="display:none;bottom:12px;touch-action:auto"><p id="cHint" class="mb-1">ضع <b>كارت بنك حقيقي</b> فوق المستطيل المنقّط وحرّك السلايدر لحد ما حدوده تطابق الكارت تماماً (مرة واحدة فقط):</p><input id="cal" type="range" min="170" max="760" step="0.5"><div class="flex gap-2 my-1"><button id="cm1" class="btn flex-1" style="padding:.35rem">− أصغر</button><button id="cp1" class="btn flex-1" style="padding:.35rem">أكبر +</button></div><p class="mt-1">أو قِس أي شيء تعرف طوله: ضع الخطين A و B على طرفيه واكتب طوله الحقيقي بالمم:</p><div class="flex gap-2 mt-1"><input id="cLen" type="number" inputmode="decimal" placeholder="مم" class="mono flex-1 p-2 text-center"><button id="cGo" class="btn v" style="padding:.4rem 1rem">اضبط</button></div></div>
+<div id="cam" class="absolute inset-0" style="display:none;z-index:20;background:#000;touch-action:none"><video id="cv" autoplay playsinline muted style="width:100%;height:100%;object-fit:cover"></video><svg id="cs" class="absolute inset-0 w-full h-full"></svg>
+<div id="ch" class="absolute top-2 left-3 right-3 glass p-2 text-center text-sm font-bold" style="z-index:2"></div>
+<div class="absolute left-3 right-3 bottom-3 flex gap-2 items-center" style="z-index:2"><input id="cr" type="number" inputmode="decimal" value="85.6" class="mono p-2 text-center" style="width:84px"><button id="cF" class="btn flex-1" style="padding:.6rem">📸 تجميد</button><button id="cX" class="btn" style="padding:.6rem">↺</button><button id="cC" class="btn r" style="padding:.6rem">✕</button></div></div>
 <div id="ln1" class="ln"><i style="background:var(--r);box-shadow:0 0 10px var(--r)"></i><b style="color:var(--r)">A</b></div>
 <div id="ln2" class="ln"><i style="background:var(--c);box-shadow:0 0 10px var(--c)"></i><b style="color:var(--c)">B</b></div>
 <div id="rd" class="mono absolute left-3 glass p-3 text-center z-10" style="bottom:48px"><div id="mm" class="text-2xl font-black" style="color:var(--v)">0.0 mm</div><div id="cm" class="text-sm text-zinc-300">0.00 cm</div></div></section>
@@ -221,6 +224,21 @@ $$('.ln').forEach(l=>{l.onpointerdown=e=>{l.setPointerCapture(e.pointerId);l.dr=
 $('#mCal').onclick=()=>calUI($('#cp').style.display=='none');
 $('#cm1').onclick=()=>cal2(+$('#cal').value-1);$('#cp1').onclick=()=>cal2(+$('#cal').value+1);
 $('#cGo').onclick=()=>{const L=parseFloat($('#cLen').value),px=Math.abs($('#ln2').offsetTop-$('#ln1').offsetTop);if(L>0&&px>10)cal2(px/L*85.6)};
+let pts=[],stream=null;
+const dd=(a,b)=>Math.hypot(b.x-a.x,b.y-a.y);
+function cDraw(){const R=+$('#cr').value||85.6,n=pts.length;let h='',t=n<2?'① اضغط على طرفَي المرجع (كارت بنك '+R+' مم) بجانب الشيء، ويُفضَّل 📸 تجميد الصورة أولاً':'② اضغط على بداية ونهاية الشيء المراد قياسه';
+const L=(a,b,c)=>`<line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="${c}" stroke-width="3"/>`;
+if(n>1)h+=L(pts[0],pts[1],'#FFD60A');if(n>3)h+=L(pts[2],pts[3],'#34F5A5');
+pts.forEach((q,i)=>h+=`<circle cx="${q.x}" cy="${q.y}" r="9" fill="${i<2?'#FFD60A':'#34F5A5'}" stroke="#000" stroke-width="2"/>`);
+if(n>3){const mm=dd(pts[2],pts[3])/dd(pts[0],pts[1])*R;t='النتيجة: '+(mm/10).toFixed(1)+' سم ('+mm.toFixed(0)+' مم) — اضغط لقياس شيء آخر';
+h+=`<text x="${(pts[2].x+pts[3].x)/2}" y="${(pts[2].y+pts[3].y)/2-14}" text-anchor="middle" font-size="22" font-weight="900" fill="#fff" stroke="#000" stroke-width="4" paint-order="stroke">${(mm/10).toFixed(1)} cm</text>`}
+$('#cs').innerHTML=h;$('#ch').textContent=t}
+$('#cs').onpointerdown=e=>{const r=$('#cam').getBoundingClientRect(),q={x:e.clientX-r.left,y:e.clientY-r.top};if(pts.length>3)pts=pts.slice(0,2);pts.push(q);cDraw()};
+$('#cr').oninput=cDraw;
+$('#mCam').onclick=async()=>{$('#cam').style.display='block';pts=[];cDraw();try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false});$('#cv').srcObject=stream}catch(e){$('#ch').textContent='تعذّر فتح الكاميرا — اسمح بالإذن أو افتح الملف مباشرة في المتصفح'}};
+$('#cF').onclick=()=>{const v=$('#cv');if(v.paused){v.play();$('#cF').textContent='📸 تجميد'}else{v.pause();$('#cF').textContent='▶ تشغيل'}};
+$('#cX').onclick=()=>{pts=[];cDraw()};
+$('#cC').onclick=()=>{stream&&stream.getTracks().forEach(t=>t.stop());stream=null;$('#cv').srcObject=null;$('#cam').style.display='none';$('#cF').textContent='📸 تجميد'};
 $('#mU').onclick=()=>{uI=(uI+1)%3;$('#mU').textContent=['mm','cm','in'][uI];drawR();rd()};
 $('#ln1').style.top='200px';$('#ln2').style.top='320px';
 new ResizeObserver(drawR).observe(p3);setCal(clamp(ppm*85.6,170,760));{let c=0;try{c=localStorage.getItem('ppmc')}catch(e){}cald=!!c;calUI(false);rd()}
