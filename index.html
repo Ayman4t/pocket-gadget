@@ -257,4 +257,5 @@ addEventListener('deviceorientation',e=>{if(lm||e.gamma==null)return;$('#sx').va
 addEventListener('devicemotion',e=>{if(!lm)return;const a=e.accelerationIncludingGravity;if(!a||a.x==null)return;const X=a.x,Y=a.y,Z=a.z,sg=Math.sign(Y)||1,D=180/Math.PI;
 if(lm==1)sm(D*(Math.abs(Y)>=Math.abs(X)?Math.atan2(X*sg,Math.abs(Y)):Math.atan2(Y*(Math.sign(X)||1),Math.abs(X))),0);else sm(D*Math.atan2(X*sg,Math.abs(Y)),D*Math.atan2(Z*sg,Math.abs(Y)))});
 ['#sx','#sy'].forEach(s=>$(s).oninput=()=>lvl(+$('#sx').value,+$('#sy').value));lvl(0,0);
+
 </script></body></html>
