@@ -100,18 +100,17 @@ nav.glass{display:flex;justify-content:center;gap:6px;width:max-content;max-widt
 <button id="gHold" class="absolute bottom-6 left-6 w-24 h-24 rounded-full text-3xl" style="border:3px solid var(--c);background:rgba(0,245,212,.15);box-shadow:0 0 20px var(--c);touch-action:none">☝️</button>
 <button id="gClose" class="btn r absolute top-4 right-4">إغلاق</button></div></section>
 
-<!-- 4 RULER -->
-<section class="pg" id="p3" style="padding:0;overflow:hidden;touch-action:none">
-<canvas id="rc" class="absolute inset-0 w-full h-full"></canvas>
-<div class="absolute top-2 left-3 right-14 z-10 flex gap-2" style="touch-action:auto"><button id="mCal" class="btn flex-1" style="padding:.5rem;font-size:13px">🎯 معايرة</button><button id="mCam" class="btn v flex-1" style="padding:.5rem;font-size:13px">📷 كاميرا</button><button id="mU" class="btn flex-1" style="padding:.5rem;font-size:13px">mm</button></div>
-<div id="card" style="display:none;position:absolute;left:50%;top:64px;transform:translateX(-50%);border:2px dashed var(--v);border-radius:12px;z-index:3;pointer-events:none;background:rgba(198,255,61,.07)"><span style="position:absolute;inset:0;display:grid;place-items:center;font-size:12px;color:var(--v);text-align:center">💳 كارت بنك<br>85.6×54 مم</span></div>
-<div id="cp" class="absolute left-3 right-14 glass p-3 z-10 text-xs" style="display:none;bottom:12px;touch-action:auto"><p id="cHint" class="mb-1">ضع <b>كارت بنك حقيقي</b> فوق المستطيل المنقّط وحرّك السلايدر لحد ما حدوده تطابق الكارت تماماً (مرة واحدة فقط):</p><input id="cal" type="range" min="170" max="760" step="0.5"><div class="flex gap-2 my-1"><button id="cm1" class="btn flex-1" style="padding:.35rem">− أصغر</button><button id="cp1" class="btn flex-1" style="padding:.35rem">أكبر +</button></div><p class="mt-1">أو قِس أي شيء تعرف طوله: ضع الخطين A و B على طرفيه واكتب طوله الحقيقي بالمم:</p><div class="flex gap-2 mt-1"><input id="cLen" type="number" inputmode="decimal" placeholder="مم" class="mono flex-1 p-2 text-center"><button id="cGo" class="btn v" style="padding:.4rem 1rem">اضبط</button></div></div>
-<div id="cam" class="absolute inset-0" style="display:none;z-index:20;background:#000;touch-action:none"><video id="cv" autoplay playsinline muted style="width:100%;height:100%;object-fit:cover"></video><svg id="cs" class="absolute inset-0 w-full h-full"></svg>
-<div id="ch" class="absolute top-2 left-3 right-3 glass p-2 text-center text-sm font-bold" style="z-index:2"></div>
-<div class="absolute left-3 right-3 bottom-3 flex gap-2 items-center" style="z-index:2"><input id="cr" type="number" inputmode="decimal" value="85.6" class="mono p-2 text-center" style="width:84px"><button id="cF" class="btn flex-1" style="padding:.6rem">📸 تجميد</button><button id="cX" class="btn" style="padding:.6rem">↺</button><button id="cC" class="btn r" style="padding:.6rem">✕</button></div></div>
-<div id="ln1" class="ln"><i style="background:var(--r);box-shadow:0 0 10px var(--r)"></i><b style="color:var(--r)">A</b></div>
-<div id="ln2" class="ln"><i style="background:var(--c);box-shadow:0 0 10px var(--c)"></i><b style="color:var(--c)">B</b></div>
-<div id="rd" class="mono absolute left-3 glass p-3 text-center z-10" style="bottom:48px"><div id="mm" class="text-2xl font-black" style="color:var(--v)">0.0 mm</div><div id="cm" class="text-sm text-zinc-300">0.00 cm</div></div></section>
+<!-- 4 WEIGHT -->
+<section class="pg" id="p3"><div class="glass p-4 text-center">
+<h2 style="color:var(--c)">⚖️ ميزان الارتداد <small class="text-xs text-zinc-400">(تجريبي)</small></h2>
+<p class="text-xs text-zinc-300 mt-2" dir="rtl">علّق الهاتف في جراب مرن أو شريطة مطاطية عريضة بحيث يرتد رأسياً، <b>فوق سطح ناعم</b> حتى لا يسقط. اضغط «ابدأ» ثم اسحب الهاتف لأسفل قليلاً وأفلته ليهتز نحو 7 ثوانٍ.</p>
+<div class="flex gap-2 mt-3"><button class="btn sel flex-1 wm" data-m="0" style="padding:.55rem .2rem;font-size:13px">① فارغ</button><button class="btn flex-1 wm" data-m="1" style="padding:.55rem .2rem;font-size:13px">② وزن معلوم</button><button class="btn flex-1 wm" data-m="2" style="padding:.55rem .2rem;font-size:13px">③ قياس</button></div>
+<div id="wk" style="display:none" class="mt-3 flex gap-2 items-center justify-center"><span class="text-sm">الوزن المعلوم (جم)</span><input id="wg" type="number" inputmode="decimal" value="200" class="mono p-2 text-center" style="width:100px"></div>
+<canvas id="wc" class="w-full mt-3" style="height:110px;border-radius:18px;background:rgba(0,0,0,.4)"></canvas>
+<div id="wr" class="mono text-4xl font-black mt-3" style="color:var(--v)">— جم</div>
+<div id="wi" class="text-sm text-zinc-300 mt-1" dir="auto"></div>
+<button id="wgo" class="btn v w-full mt-3">▶ ابدأ (7 ث)</button>
+<button id="wrs" class="text-xs text-zinc-400 mt-3 underline">مسح المعايرة</button></div></section>
 
 <!-- 5 LEVEL -->
 <section class="pg" id="p4"><div class="glass p-4 text-center space-y-3">
@@ -130,7 +129,7 @@ nav.glass{display:flex;justify-content:center;gap:6px;width:max-content;max-widt
 
 <nav class="glass flex mx-2 mb-2">
 <button class="dk act" data-p="0"><span>🪧</span><em>اليافطة</em></button><button class="dk" data-p="1"><span>🚨</span><em>الحارس</em></button>
-<button class="dk" data-p="2"><span>👻</span><em>الشبح</em></button><button class="dk" data-p="3"><span>📏</span><em>المسطرة</em></button><button class="dk" data-p="4"><span>🎯</span><em>الميزان</em></button></nav>
+<button class="dk" data-p="2"><span>👻</span><em>الشبح</em></button><button class="dk" data-p="3"><span>⚖️</span><em>الوزن</em></button><button class="dk" data-p="4"><span>🎯</span><em>الميزان</em></button></nav>
 
 <!-- Sign fullscreen -->
 <div id="fs" class="ov"><div id="fsBox"><div id="fsT"></div></div>
@@ -157,7 +156,7 @@ let wl;async function wake(){try{wl=await navigator.wakeLock.request('screen');$
 wake();document.addEventListener('visibilitychange',()=>document.visibilityState=='visible'&&wake());
 document.addEventListener('pointerdown',()=>{if(!wl||wl.released)wake()},{passive:true});
 /* tabs */
-function go(i){$$('.pg').forEach((p,k)=>p.classList.toggle('act',k==i));$$('.dk').forEach(b=>b.classList.toggle('act',b.dataset.p==i));if(i==3)drawR();if(i!=2)$('#gBox').classList.remove('on')}
+function go(i){$$('.pg').forEach((p,k)=>p.classList.toggle('act',k==i));$$('.dk').forEach(b=>b.classList.toggle('act',b.dataset.p==i));if(i!=2)$('#gBox').classList.remove('on')}
 $$('.dk').forEach(b=>b.onclick=()=>go(+b.dataset.p));
 
 /* 1 SIGN */
@@ -170,7 +169,7 @@ $('#sGo').onclick=async()=>{$('#fsT').textContent=$('#sTxt').value||' ';$('#fs')
 $('#fsP').onclick=()=>{zoom=Math.min(2.5,zoom*1.12);fit()};$('#fsM').onclick=()=>{zoom=Math.max(.4,zoom/1.12);fit()};
 $('#fsR').onclick=()=>{auto=false;rot=!rot;fit()};
 $('#fsX').onclick=()=>{$('#fs').classList.remove('on');micOff();try{document.fullscreenElement&&document.exitFullscreen()}catch(e){}};
-addEventListener('resize',()=>{$('#fs').classList.contains('on')&&fit();drawR()});
+addEventListener('resize',()=>{$('#fs').classList.contains('on')&&fit()});
 $('#corner').onpointerdown=e=>{const n=Date.now();if(n-lastTap<350){locked=!locked;$('#fsCtl').style.display=locked?'none':'flex';$('#corner').textContent=locked?'🔒':'';vib(40)}lastTap=n};
 $('#reactT').onchange=e=>{if(!e.target.checked)micOff();else if($('#fs').classList.contains('on'))micOn()};
 async function micOn(){if(mic)return;try{const s=await navigator.mediaDevices.getUserMedia({audio:true}),c=ac(),an=c.createAnalyser();an.fftSize=512;c.createMediaStreamSource(s).connect(an);mic={s};const d=new Uint8Array(512);let avg=0,last=0,h=60;
@@ -209,39 +208,28 @@ gb.addEventListener('pointerup',e=>{if(Math.abs(e.clientX-sx)>70&&Math.abs(e.cli
 function shock(){const s=$('#shock');s.classList.add('on');vib([100,50,200]);[500,420,340,260].forEach((f,i)=>beep(f,.18,'square',.25,i*.17));beep(120,.5,'sawtooth',.25,.7);setTimeout(()=>s.classList.remove('on'),2600)}
 $('#shock').onclick=()=>$('#shock').classList.remove('on');
 
-/* 4 RULER */
-let mode=0,uI=0,cald=false;const U=[1,.1,1/25.4];let ppm=(()=>{try{return+localStorage.getItem('ppm')}catch(e){return 0}})()||(matchMedia('(pointer:coarse)').matches?6.3:3.78);const rc=$('#rc'),p3=$('#p3');
-function setCal(px){ppm=px/85.6;try{localStorage.setItem('ppm',ppm)}catch(e){}$('#cal').value=px;$('#card').style.width=px/1.586+'px';$('#card').style.height=px+'px';drawR();rd()}
-const cal2=px=>{cald=true;setCal(clamp(px,170,760));try{localStorage.setItem('ppmc',1)}catch(e){}};
-function calUI(o){$('#cp').style.display=$('#card').style.display=o?'block':'none';$('#rd').style.display=o?'none':'block'}
-$('#cal').oninput=e=>cal2(+e.target.value);
-function drawR(){const w=p3.clientWidth,h=p3.clientHeight;if(!w)return;const d=devicePixelRatio||1;rc.width=w*d;rc.height=h*d;const x=rc.getContext('2d');x.scale(d,d);x.fillStyle='#0a0818';x.fillRect(0,0,w,h);
-x.strokeStyle=x.fillStyle='#CCFF00';x.font='11px monospace';const inch=uI==2,sp=inch?ppm*25.4/8:ppm,M=inch?8:10,m5=inch?4:5,Lf=i=>i%M==0?30:i%m5==0?20:11;
-x.textAlign='right';for(let i=0;i*sp<h;i++){const y=i*sp;x.globalAlpha=i%M==0?1:.8;x.beginPath();x.moveTo(w,y+.5);x.lineTo(w-Lf(i),y+.5);x.stroke();if(i%M==0&&i)x.fillText(i/M,w-34,y+4)}
-x.textAlign='center';for(let i=0;i*sp<w;i++){const q=i*sp;x.globalAlpha=i%M==0?1:.8;x.beginPath();x.moveTo(q+.5,h);x.lineTo(q+.5,h-Lf(i));x.stroke();if(i%M==0&&i)x.fillText(i/M,q,h-36)}x.globalAlpha=1}
-function rd(){const mm=Math.abs($('#ln2').offsetTop-$('#ln1').offsetTop)/ppm,u=['mm','cm','in'][uI];$('#mm').textContent=(mm*U[uI]).toFixed(uI?2:1)+' '+u;$('#cm').textContent=(uI?mm.toFixed(1)+' mm':(mm/10).toFixed(2)+' cm')+(cald?'':' · تقديري')}
-$$('.ln').forEach(l=>{l.onpointerdown=e=>{l.setPointerCapture(e.pointerId);l.dr=1};l.onpointermove=e=>{if(!l.dr)return;l.style.top=clamp(e.clientY-p3.getBoundingClientRect().top,0,p3.clientHeight)+'px';rd()};l.onpointerup=l.onpointercancel=()=>l.dr=0});
-$('#mCal').onclick=()=>calUI($('#cp').style.display=='none');
-$('#cm1').onclick=()=>cal2(+$('#cal').value-1);$('#cp1').onclick=()=>cal2(+$('#cal').value+1);
-$('#cGo').onclick=()=>{const L=parseFloat($('#cLen').value),px=Math.abs($('#ln2').offsetTop-$('#ln1').offsetTop);if(L>0&&px>10)cal2(px/L*85.6)};
-let pts=[],stream=null;
-const dd=(a,b)=>Math.hypot(b.x-a.x,b.y-a.y);
-function cDraw(){const R=+$('#cr').value||85.6,n=pts.length;let h='',t=n<2?'① اضغط على طرفَي المرجع (كارت بنك '+R+' مم) بجانب الشيء، ويُفضَّل 📸 تجميد الصورة أولاً':'② اضغط على بداية ونهاية الشيء المراد قياسه';
-const L=(a,b,c)=>`<line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="${c}" stroke-width="3"/>`;
-if(n>1)h+=L(pts[0],pts[1],'#FFD60A');if(n>3)h+=L(pts[2],pts[3],'#34F5A5');
-pts.forEach((q,i)=>h+=`<circle cx="${q.x}" cy="${q.y}" r="9" fill="${i<2?'#FFD60A':'#34F5A5'}" stroke="#000" stroke-width="2"/>`);
-if(n>3){const mm=dd(pts[2],pts[3])/dd(pts[0],pts[1])*R;t='النتيجة: '+(mm/10).toFixed(1)+' سم ('+mm.toFixed(0)+' مم) — اضغط لقياس شيء آخر';
-h+=`<text x="${(pts[2].x+pts[3].x)/2}" y="${(pts[2].y+pts[3].y)/2-14}" text-anchor="middle" font-size="22" font-weight="900" fill="#fff" stroke="#000" stroke-width="4" paint-order="stroke">${(mm/10).toFixed(1)} cm</text>`}
-$('#cs').innerHTML=h;$('#ch').textContent=t}
-$('#cs').onpointerdown=e=>{const r=$('#cam').getBoundingClientRect(),q={x:e.clientX-r.left,y:e.clientY-r.top};if(pts.length>3)pts=pts.slice(0,2);pts.push(q);cDraw()};
-$('#cr').oninput=cDraw;
-$('#mCam').onclick=async()=>{$('#cam').style.display='block';pts=[];cDraw();try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false});$('#cv').srcObject=stream}catch(e){$('#ch').textContent='تعذّر فتح الكاميرا — اسمح بالإذن أو افتح الملف مباشرة في المتصفح'}};
-$('#cF').onclick=()=>{const v=$('#cv');if(v.paused){v.play();$('#cF').textContent='📸 تجميد'}else{v.pause();$('#cF').textContent='▶ تشغيل'}};
-$('#cX').onclick=()=>{pts=[];cDraw()};
-$('#cC').onclick=()=>{stream&&stream.getTracks().forEach(t=>t.stop());stream=null;$('#cv').srcObject=null;$('#cam').style.display='none';$('#cF').textContent='📸 تجميد'};
-$('#mU').onclick=()=>{uI=(uI+1)%3;$('#mU').textContent=['mm','cm','in'][uI];drawR();rd()};
-$('#ln1').style.top='200px';$('#ln2').style.top='320px';
-new ResizeObserver(drawR).observe(p3);setCal(clamp(ppm*85.6,170,760));{let c=0;try{c=localStorage.getItem('ppmc')}catch(e){}cald=!!c;calUI(false);rd()}
+/* 4 WEIGHT */
+let cal=(()=>{try{return JSON.parse(localStorage.getItem('wcal'))||{}}catch(e){return{}}})(),wm=0,rec=[],run=false,w0=0;
+const wsave=()=>{try{localStorage.setItem('wcal',JSON.stringify(cal))}catch(e){}},wc=$('#wc');
+const wstat=()=>cal.T0?(cal.B?'المعايرة جاهزة ✓ — انتقل إلى ③ للقياس':'سُجّل الفارغ — أكمل الخطوة ②'):'ابدأ بالخطوة ① (بدون أي وزن إضافي)';
+function per(r){if(r.length<40)return null;const mu=r.reduce((a,b)=>a+b.v,0)/r.length,u=r.map(x=>x.v-mu),n=u.length,w=u.map((x,i)=>(u[Math.max(0,i-2)]+u[Math.max(0,i-1)]+x+u[Math.min(n-1,i+1)]+u[Math.min(n-1,i+2)])/5),sd=Math.sqrt(w.reduce((a,b)=>a+b*b,0)/n);
+if(sd<.25)return{low:1};const thr=.3*sd,tc=[];let ar=false;
+for(let i=1;i<n;i++){if(w[i]<-thr)ar=true;if(ar&&w[i-1]<=0&&w[i]>0){tc.push(r[i-1].t+(-w[i-1]/(w[i]-w[i-1]))*(r[i].t-r[i-1].t));ar=false}}
+if(tc.length<3)return{few:1};const d=[];for(let i=1;i<tc.length;i++)d.push(tc[i]-tc[i-1]);d.sort((a,b)=>a-b);const T=d[d.length>>1]/1000;
+return T<.2?{few:1}:{T,n:tc.length-1}}
+function wdraw(){const d=devicePixelRatio||1,w=wc.clientWidth,h=wc.clientHeight;if(!w)return;wc.width=w*d;wc.height=h*d;const x=wc.getContext('2d');x.scale(d,d);x.strokeStyle='#22E5FF';x.lineWidth=2;x.beginPath();const r=rec.slice(-240);if(r.length>2){const mu=r.reduce((a,b)=>a+b.v,0)/r.length;r.forEach((q,i)=>{const X=i/239*w,Y=h/2-(q.v-mu)*h/14;i?x.lineTo(X,Y):x.moveTo(X,Y)});x.stroke()}}
+function fin(){const o=per(rec.filter(q=>q.t>w0+700)),R=$('#wr'),I=$('#wi');
+if(!o||o.few||o.low){R.textContent='—';I.textContent=o&&o.low?'الاهتزاز ضعيف جداً — اسحب الهاتف أكثر ثم أفلته':'لم يُكتشف اهتزاز منتظم — تأكد أن الهاتف يرتد رأسياً بحرية';return}
+const T2=o.T*o.T,tt=o.T.toFixed(3)+' ث ('+o.n+' ارتدادات)';
+if(wm==0){cal.T0=o.T;delete cal.B;wsave();R.textContent=o.T.toFixed(2)+' s';I.textContent='✓ سُجّل زمن الارتداد الفارغ '+tt+' — انتقل إلى ②'}
+else if(wm==1){const m=+$('#wg').value;if(!cal.T0){I.textContent='سجّل الفارغ أولاً (①)';return}const k=(T2-cal.T0*cal.T0)/m;if(!(m>0)||!(k>0)){I.textContent='يجب أن يكون الزمن مع الوزن أطول من الفارغ — ضع الوزن داخل الجراب';return}cal.B=k;wsave();R.textContent=o.T.toFixed(2)+' s';I.textContent='✓ تمت المعايرة — انتقل إلى ③'}
+else{if(!cal.B){I.textContent='عاير أولاً بالخطوتين ① و ②';return}const g=Math.max(0,(T2-cal.T0*cal.T0)/cal.B);R.textContent=g.toFixed(0)+' جم';I.textContent='≈ '+(g/28.35).toFixed(1)+' أونصة · '+tt+' · الدقة تقريبية ±10٪';vib(80);beep(900,.15)}}
+addEventListener('devicemotion',e=>{if(!run)return;const a=e.accelerationIncludingGravity;if(!a||a.x==null)return;rec.push({t:performance.now(),v:Math.hypot(a.x,a.y,a.z)})});
+$('#wgo').onclick=async()=>{if(run)return;try{DeviceMotionEvent.requestPermission&&await DeviceMotionEvent.requestPermission()}catch(e){}
+rec=[];run=true;w0=performance.now();const b=$('#wgo'),iv=setInterval(()=>{const s=7-(performance.now()-w0)/1000;b.textContent='⏳ '+Math.max(0,s).toFixed(1)+' ث';wdraw();if(s<=0){clearInterval(iv);run=false;b.textContent='▶ ابدأ (7 ث)';fin()}},100)};
+$$('.wm').forEach(b=>b.onclick=()=>{wm=+b.dataset.m;$$('.wm').forEach(x=>x.classList.toggle('sel',x==b));$('#wk').style.display=wm==1?'flex':'none';$('#wi').textContent=wstat()});
+$('#wrs').onclick=()=>{cal={};wsave();$('#wi').textContent=wstat();$('#wr').textContent='— جم'};
+$('#wi').textContent=wstat();
 
 /* 5 LEVEL */
 let lm=0,was=false,sp=0,sq=0;const sm=(p,q)=>{sp+=(p-sp)*.12;sq+=(q-sq)*.12;lvl(sp,sq)};const DG=Math.PI/180;
@@ -257,5 +245,4 @@ addEventListener('deviceorientation',e=>{if(lm||e.gamma==null)return;$('#sx').va
 addEventListener('devicemotion',e=>{if(!lm)return;const a=e.accelerationIncludingGravity;if(!a||a.x==null)return;const X=a.x,Y=a.y,Z=a.z,sg=Math.sign(Y)||1,D=180/Math.PI;
 if(lm==1)sm(D*(Math.abs(Y)>=Math.abs(X)?Math.atan2(X*sg,Math.abs(Y)):Math.atan2(Y*(Math.sign(X)||1),Math.abs(X))),0);else sm(D*Math.atan2(X*sg,Math.abs(Y)),D*Math.atan2(Z*sg,Math.abs(Y)))});
 ['#sx','#sy'].forEach(s=>$(s).oninput=()=>lvl(+$('#sx').value,+$('#sy').value));lvl(0,0);
-
 </script></body></html>
