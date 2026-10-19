@@ -102,15 +102,7 @@ nav.glass{display:flex;justify-content:center;gap:6px;width:max-content;max-widt
 
 <!-- 4 WEIGHT -->
 <section class="pg" id="p3"><div class="glass p-4 text-center">
-<h2 style="color:var(--c)">⚖️ ميزان الارتداد <small class="text-xs text-zinc-400">(تجريبي)</small></h2><div class="flex gap-2 mt-3"><button class="btn flex-1 wt" data-t="0" style="padding:.55rem .2rem;font-size:13px">🪀 ارتداد</button><button class="btn sel flex-1 wt" data-t="1" style="padding:.55rem .2rem;font-size:13px">📱 على الشاشة</button></div><div id="wb" style="display:none">
-<p class="text-xs text-zinc-300 mt-2" dir="rtl">علّق الهاتف في جراب مرن أو شريطة مطاطية عريضة بحيث يرتد رأسياً، <b>فوق سطح ناعم</b> حتى لا يسقط. اضغط «ابدأ» ثم اسحب الهاتف لأسفل قليلاً وأفلته ليهتز نحو 7 ثوانٍ.</p>
-<div class="flex gap-2 mt-3"><button class="btn sel flex-1 wm" data-m="0" style="padding:.55rem .2rem;font-size:13px">① فارغ</button><button class="btn flex-1 wm" data-m="1" style="padding:.55rem .2rem;font-size:13px">② وزن معلوم</button><button class="btn flex-1 wm" data-m="2" style="padding:.55rem .2rem;font-size:13px">③ قياس</button></div>
-<div id="wk" style="display:none" class="mt-3 flex gap-2 items-center justify-center"><span class="text-sm">الوزن المعلوم (جم)</span><input id="wg" type="number" inputmode="decimal" value="200" class="mono p-2 text-center" style="width:100px"></div>
-<canvas id="wc" class="w-full mt-3" style="height:110px;border-radius:18px;background:rgba(0,0,0,.4)"></canvas>
-<div id="wr" class="mono text-4xl font-black mt-3" style="color:var(--v)">— جم</div>
-<div id="wi" class="text-sm text-zinc-300 mt-1" dir="auto"></div>
-<button id="wgo" class="btn v w-full mt-3">▶ ابدأ (7 ث)</button>
-<button id="wrs" class="text-xs text-zinc-400 mt-3 underline">مسح المعايرة</button></div><div id="ws"><p class="text-xs text-zinc-300 mt-2" dir="rtl">ضع الجسم على المربع أو اضغط بإصبعك: الهاتف يقيس <b>مساحة/قوة التلامس</b> ويحوّلها لوزن بعد المعايرة. الأفضل جسم مرن موصِّل للكهرباء (ثمرة، كيس ماء). ثبّت الهاتف على سطح مستوٍ.</p>
+<h2 style="color:var(--c)">⚖️ ميزان اللمس</h2><div id="ws"><p class="text-xs text-zinc-300 mt-2" dir="rtl">ضع الجسم على المربع أو اضغط بإصبعك: الهاتف يقيس <b>مساحة/قوة التلامس</b> ويحوّلها لوزن بعد المعايرة. الأفضل جسم مرن موصِّل للكهرباء (ثمرة، كيس ماء). ثبّت الهاتف على سطح مستوٍ.</p>
 <div id="wp" class="mt-3 grid place-items-center text-zinc-400 text-sm" style="height:210px;border:2px dashed var(--c);border-radius:22px;touch-action:none;background:rgba(34,229,255,.06)">ضع الجسم هنا</div>
 <div id="sr" class="mono text-4xl font-black mt-3" style="color:var(--v)">— جم</div>
 <div id="si" class="mono text-xs text-zinc-300 mt-1" dir="auto">القيمة الخام: 0</div>
@@ -215,29 +207,6 @@ gb.addEventListener('pointerup',e=>{if(Math.abs(e.clientX-sx)>70&&Math.abs(e.cli
 function shock(){const s=$('#shock');s.classList.add('on');vib([100,50,200]);[500,420,340,260].forEach((f,i)=>beep(f,.18,'square',.25,i*.17));beep(120,.5,'sawtooth',.25,.7);setTimeout(()=>s.classList.remove('on'),2600)}
 $('#shock').onclick=()=>$('#shock').classList.remove('on');
 
-/* 4 WEIGHT */
-let cal=(()=>{try{return JSON.parse(localStorage.getItem('wcal'))||{}}catch(e){return{}}})(),wm=0,rec=[],run=false,w0=0;
-const wsave=()=>{try{localStorage.setItem('wcal',JSON.stringify(cal))}catch(e){}},wc=$('#wc');
-const wstat=()=>cal.T0?(cal.B?'المعايرة جاهزة ✓ — انتقل إلى ③ للقياس':'سُجّل الفارغ — أكمل الخطوة ②'):'ابدأ بالخطوة ① (بدون أي وزن إضافي)';
-function per(r){if(r.length<40)return null;const mu=r.reduce((a,b)=>a+b.v,0)/r.length,u=r.map(x=>x.v-mu),n=u.length,w=u.map((x,i)=>(u[Math.max(0,i-2)]+u[Math.max(0,i-1)]+x+u[Math.min(n-1,i+1)]+u[Math.min(n-1,i+2)])/5),sd=Math.sqrt(w.reduce((a,b)=>a+b*b,0)/n);
-if(sd<.25)return{low:1};const thr=.3*sd,tc=[];let ar=false;
-for(let i=1;i<n;i++){if(w[i]<-thr)ar=true;if(ar&&w[i-1]<=0&&w[i]>0){tc.push(r[i-1].t+(-w[i-1]/(w[i]-w[i-1]))*(r[i].t-r[i-1].t));ar=false}}
-if(tc.length<3)return{few:1};const d=[];for(let i=1;i<tc.length;i++)d.push(tc[i]-tc[i-1]);d.sort((a,b)=>a-b);const T=d[d.length>>1]/1000;
-return T<.2?{few:1}:{T,n:tc.length-1}}
-function wdraw(){const d=devicePixelRatio||1,w=wc.clientWidth,h=wc.clientHeight;if(!w)return;wc.width=w*d;wc.height=h*d;const x=wc.getContext('2d');x.scale(d,d);x.strokeStyle='#22E5FF';x.lineWidth=2;x.beginPath();const r=rec.slice(-240);if(r.length>2){const mu=r.reduce((a,b)=>a+b.v,0)/r.length;r.forEach((q,i)=>{const X=i/239*w,Y=h/2-(q.v-mu)*h/14;i?x.lineTo(X,Y):x.moveTo(X,Y)});x.stroke()}}
-function fin(){const o=per(rec.filter(q=>q.t>w0+700)),R=$('#wr'),I=$('#wi');
-if(!o||o.few||o.low){R.textContent='—';I.textContent=o&&o.low?'الاهتزاز ضعيف جداً — اسحب الهاتف أكثر ثم أفلته':'لم يُكتشف اهتزاز منتظم — تأكد أن الهاتف يرتد رأسياً بحرية';return}
-const T2=o.T*o.T,tt=o.T.toFixed(3)+' ث ('+o.n+' ارتدادات)';
-if(wm==0){cal.T0=o.T;delete cal.B;wsave();R.textContent=o.T.toFixed(2)+' s';I.textContent='✓ سُجّل زمن الارتداد الفارغ '+tt+' — انتقل إلى ②'}
-else if(wm==1){const m=+$('#wg').value;if(!cal.T0){I.textContent='سجّل الفارغ أولاً (①)';return}const k=(T2-cal.T0*cal.T0)/m;if(!(m>0)||!(k>0)){I.textContent='يجب أن يكون الزمن مع الوزن أطول من الفارغ — ضع الوزن داخل الجراب';return}cal.B=k;wsave();R.textContent=o.T.toFixed(2)+' s';I.textContent='✓ تمت المعايرة — انتقل إلى ③'}
-else{if(!cal.B){I.textContent='عاير أولاً بالخطوتين ① و ②';return}const g=Math.max(0,(T2-cal.T0*cal.T0)/cal.B);R.textContent=g.toFixed(0)+' جم';I.textContent='≈ '+(g/28.35).toFixed(1)+' أونصة · '+tt+' · الدقة تقريبية ±10٪';vib(80);beep(900,.15)}}
-addEventListener('devicemotion',e=>{if(!run)return;const a=e.accelerationIncludingGravity;if(!a||a.x==null)return;rec.push({t:performance.now(),v:Math.hypot(a.x,a.y,a.z)})});
-$('#wgo').onclick=async()=>{if(run)return;try{DeviceMotionEvent.requestPermission&&await DeviceMotionEvent.requestPermission()}catch(e){}
-rec=[];run=true;w0=performance.now();const b=$('#wgo'),iv=setInterval(()=>{const s=7-(performance.now()-w0)/1000;b.textContent='⏳ '+Math.max(0,s).toFixed(1)+' ث';wdraw();if(s<=0){clearInterval(iv);run=false;b.textContent='▶ ابدأ (7 ث)';fin()}},100)};
-$$('.wm').forEach(b=>b.onclick=()=>{wm=+b.dataset.m;$$('.wm').forEach(x=>x.classList.toggle('sel',x==b));$('#wk').style.display=wm==1?'flex':'none';$('#wi').textContent=wstat()});
-$('#wrs').onclick=()=>{cal={};wsave();$('#wi').textContent=wstat();$('#wr').textContent='— جم'};
-$('#wi').textContent=wstat();
-
 /* 4b SCREEN SCALE */
 let wpts=(()=>{try{return JSON.parse(localStorage.getItem('wpts'))||[]}catch(e){return[]}})(),wptr=new Map(),whist=[],wlatch=0,wsm=0;const wp=$('#wp');
 const wpsv=()=>{try{localStorage.setItem('wpts',JSON.stringify(wpts))}catch(e){}};
@@ -251,7 +220,6 @@ wp.onpointerup=wp.onpointercancel=e=>{wptr.delete(e.pointerId);if(!wptr.size){co
 const wpl=()=>$('#spl').textContent=wpts.length?'نقاط المعايرة: '+wpts.map(q=>q.m+' جم ← '+q.x.toFixed(1)).join(' · ')+(wpts.length<2?' (أضف نقطة ثانية بوزن مختلف لدقة أفضل)':''):'لا توجد معايرة — ضع وزناً معلوماً، ثم اكتب وزنه وسجّل النقطة';
 $('#sadd').onclick=()=>{const m=+$('#wg2').value;if(!(m>0)||!(wlatch>0)){$('#spl').textContent='ضع جسماً على المربع أولاً ثم اكتب وزنه';return}wpts.push({x:wlatch,m});wpsv();wpl()};
 $('#sclr').onclick=()=>{wpts=[];wpsv();wpl();wshow(0,false)};
-$$('.wt').forEach(b=>b.onclick=()=>{const t=+b.dataset.t;$$('.wt').forEach(x=>x.classList.toggle('sel',x==b));$('#ws').style.display=t?'block':'none';$('#wb').style.display=t?'none':'block'});
 wpl();
 
 /* 5 LEVEL */
