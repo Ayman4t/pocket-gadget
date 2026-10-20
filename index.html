@@ -100,8 +100,8 @@ nav.glass{display:flex;justify-content:center;gap:6px;width:max-content;max-widt
 <label class="btn block text-center cursor-pointer">اختر صورة واحدة<input id="gFile" type="file" accept="image/*" hidden></label>
 <p class="text-xs text-zinc-400">الصورة مموّهة. اضغط مطوّلاً على زر الماسح لإظهارها، وسيب الزر وتتغطى فوراً.</p></div>
 <div id="gBox" class="ov" style="background:#000;align-items:center;justify-content:center;touch-action:none">
-<img id="gImg" class="max-w-full max-h-full" style="filter:blur(30px);transition:filter .05s" draggable="false" alt="">
-<button id="gHold" class="absolute bottom-6 left-6 w-24 h-24 rounded-full text-3xl" style="border:3px solid var(--c);background:rgba(0,245,212,.15);box-shadow:0 0 20px var(--c);touch-action:none">☝️</button>
+<img id="gImg" class="max-w-full max-h-full" style="filter:blur(30px);-webkit-filter:blur(30px);pointer-events:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none" draggable="false" alt="">
+<button id="gHold" class="absolute bottom-6 left-6 w-24 h-24 rounded-full text-3xl" style="border:3px solid var(--c);background:rgba(0,245,212,.15);box-shadow:0 0 20px var(--c);touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none">☝️</button>
 <button id="gClose" class="btn r absolute top-4 right-4">إغلاق</button></div></section>
 
 <!-- 4 PULSE -->
@@ -145,8 +145,6 @@ nav.glass{display:flex;justify-content:center;gap:6px;width:max-content;max-widt
 <div id="gPad" class="pad absolute bottom-6 hidden text-center"><div id="gDots" class="mono text-3xl mb-2">__</div>
 <div class="grid grid-cols-5 gap-2" id="gKeys"></div></div></div>
 
-<!-- Shock -->
-<div id="shock" class="ov items-center justify-center text-center p-6 z-50" style="background:var(--r)"><div class="text-4xl font-black leading-snug">رايح فين يا نجم؟<br>هي صورة واحدة بس! 👀😂</div></div>
 
 <script>
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
@@ -202,14 +200,14 @@ function disarm(){clearTimeout(tr);clearInterval(fl);clearInterval(vi);if(siren)
 
 /* 3 GHOST */
 const gi=$('#gImg'),gb=$('#gBox');
-$('#gFile').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{gi.src=r.result;gi.style.filter='blur(30px)';gb.classList.add('on')};r.readAsDataURL(f);e.target.value=''};
-const H=$('#gHold');H.onpointerdown=e=>{e.stopPropagation();H.setPointerCapture(e.pointerId);gi.style.filter='none'};
-['pointerup','pointercancel','lostpointercapture'].forEach(n=>H.addEventListener(n,()=>gi.style.filter='blur(30px)'));
-$('#gClose').onpointerdown=e=>e.stopPropagation();$('#gClose').onclick=()=>gb.classList.remove('on');
-let sx=0,sy=0;gb.addEventListener('pointerdown',e=>{sx=e.clientX;sy=e.clientY});
-gb.addEventListener('pointerup',e=>{if(Math.abs(e.clientX-sx)>70&&Math.abs(e.clientX-sx)>Math.abs(e.clientY-sy)*1.2)shock()});
-function shock(){const s=$('#shock');s.classList.add('on');vib([100,50,200]);[500,420,340,260].forEach((f,i)=>beep(f,.18,'square',.25,i*.17));beep(120,.5,'sawtooth',.25,.7);setTimeout(()=>s.classList.remove('on'),2600)}
-$('#shock').onclick=()=>$('#shock').classList.remove('on');
+$('#gFile').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{gi.src=r.result;showImg(false);gb.classList.add('on')};r.readAsDataURL(f);e.target.value=''};
+const showImg=v=>{const f=v?'none':'blur(30px)';gi.style.filter=f;gi.style.webkitFilter=f};
+const H=$('#gHold'),dn=e=>{e.preventDefault();e.stopPropagation();showImg(true)},up=()=>showImg(false);
+H.addEventListener('pointerdown',e=>{dn(e);try{H.setPointerCapture(e.pointerId)}catch(_){}});
+['pointerup','pointercancel'].forEach(n=>H.addEventListener(n,up));
+H.addEventListener('touchstart',dn,{passive:false});['touchend','touchcancel'].forEach(n=>H.addEventListener(n,up));
+[H,gi].forEach(x=>x.addEventListener('contextmenu',e=>e.preventDefault()));
+$('#gClose').onpointerdown=e=>e.stopPropagation();$('#gClose').onclick=()=>{showImg(false);gb.classList.remove('on')};
 
 /* 4 PULSE */
 (()=>{
